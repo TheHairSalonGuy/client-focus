@@ -19,15 +19,13 @@ type Benefit = { title: string; description: string }
 function buildBodyParagraphs(scene: Scene): string[] {
   if (scene === "restaurant") {
     return [
-      "When hungry customers hit a busy line or get sent to voicemail during peak lunch or dinner hours, they don't wait—they hang up and call the restaurant down the street. Every unanswered call is literally cash walking out your door and into your competitor's register.",
-      "Your Virtual Waitress provides 24/7 phone coverage to take takeout orders, answer menu questions, and secure table reservations automatically. By turning busy signals into paid takeout orders, the service easily pays for itself with a single saved rush hour.",
+      "When hungry customers hit a busy line during peak hours, they hang up and call the restaurant down the street—cash walking straight into your competitor's register. Your Virtual Waitress provides 24/7 coverage to take orders, answer menu questions, and book reservations automatically, paying for itself with a single saved rush hour.",
     ]
   }
   const clientsTerm = scene === "dental" ? "patients" : "clients"
   const outcomeTerm = scene === "dental" ? "procedure" : "case"
   return [
-    `When prospective ${clientsTerm} hit voicemail during peak operational hours or after closing, most won't leave a message—they immediately hang up and call a competitor. Every missed call represents lost revenue and a missed opportunity to build a long-term relationship.`,
-    `My Virtual Receptionist provides 24/7, white-glove coverage to capture high-value inquiries, gather comprehensive intake details, and seamlessly schedule appointments. By turning missed calls into booked business, the service easily pays for itself with a single saved ${outcomeTerm}.`,
+    `When prospective ${clientsTerm} hit voicemail after hours, most won't leave a message—they hang up and call a competitor, and that missed call is lost revenue. My Virtual Receptionist provides 24/7, white-glove coverage to capture inquiries, gather intake details, and schedule appointments—paying for itself with a single saved ${outcomeTerm}.`,
   ]
 }
 
