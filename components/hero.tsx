@@ -123,7 +123,7 @@ export function Hero() {
     <section id="top" className="relative w-full">
       {/* Split hero: ~45% light content panel (left) + ~55% image panel (right).
           On mobile/tablet these stack (content first, image below) via grid-cols-1. */}
-      <div className="grid w-full grid-cols-1 lg:grid-cols-[45%_55%]">
+      <div className="grid w-full grid-cols-1 lg:min-h-[85vh] lg:grid-cols-[45%_55%]">
         {/* ---------------- LEFT: content panel ---------------- */}
         {/* Clean light background, no scrim/haze, so every line is crisp and high-contrast.
             A wider column + trimmed padding lets paragraphs run more words per line
@@ -175,7 +175,7 @@ export function Hero() {
             {/* Five benefit rows — order fixed; each keeps the subtle proximity hover
                 (lift + scale from the left + brighten). */}
             <ul key={`${scene}-benefits`} className="mt-5 grid gap-2.5">
-              {benefits.slice(0, 3).map((benefit) => (
+              {benefits.map((benefit) => (
                 <li
                   key={benefit.title}
                   className="group flex origin-left transform-gpu items-start gap-3 py-0.5 text-xl leading-relaxed text-foreground transition-all duration-300 ease-out hover:-translate-y-1 hover:scale-[1.03] hover:brightness-110 sm:text-2xl"
@@ -211,7 +211,7 @@ export function Hero() {
         {/* ---------------- RIGHT: image panel (3-slide carousel) ---------------- */}
         {/* Full-bleed photo carousel. Each slide cross-fades; the right arrow advances
             restaurant → law → dental (wrapping), the left arrow steps back. */}
-        <div className="relative w-full aspect-[4/3] lg:aspect-auto lg:h-full">
+        <div className="relative w-full aspect-[4/3] lg:aspect-auto lg:h-full lg:min-h-[500px]">
           {SCENES.map((s, i) => (
             <div
               key={s}
