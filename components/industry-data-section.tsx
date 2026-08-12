@@ -19,7 +19,7 @@ const DATA: Record<Segment, StatCard[]> = {
     {
       stat: "67%–70%",
       title: "Unreachable or During Rushes",
-      desc: "Over half of customer food inquiries arrive during peak lunch and dinner rushes and go unanswered because staff are busy servicing customers in the dining room.",
+      desc: "Over half of customer food orders arrive during peak lunch and dinner rushes go unanswered because staff are busy serving customers in the dining room.",
       badge: "500+ Secret Shoppers",
       linkLabel: "Verify via Industry Studies",
       href: "https://www.nrn.com/",
