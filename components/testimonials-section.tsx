@@ -28,7 +28,7 @@ type Scenario = {
 const SCENARIOS: Scenario[] = [
   {
     quote:
-      "Our lunch order increase by a lot since we used Ashley to take phone order. We had no idea ow many order we missed..",
+      "Since letting Ashley handle our phone lines, our lunch take-out orders have surged. We had no idea how many paying customers we were losing to busy signals until Ashley captured every single call—it's a game-changer for any restaurant looking to boost daily revenue without adding extra staff.",
     name: "P' Joe",
     role: 'Owner/Chef\n"Modern Thai Cuisine"',
     industry: "Restaurant",
