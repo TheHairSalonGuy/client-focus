@@ -30,7 +30,7 @@ const SCENARIOS: Scenario[] = [
     quote:
       "Since using Ashley our lunch order increased. We had no idea how many order we missed due to busy signal. The cost was so small per hour we would be happy paying double that.",
     name: "P' Joe",
-    role: 'Owner/Chef of "Modern Thai Cuisine"',
+    role: 'Owner/Chef\n"Modern Thai Cuisine"',
     industry: "Restaurant",
     image: "/images/testimonials/chef-joe.png",
     alt: "Portrait of a restaurant owner and chef",
@@ -378,7 +378,9 @@ function TestimonialCard({ scenario, highlighted }: { scenario: Scenario; highli
             {scenario.name}
           </p>
           {/* Title moved down one row, below the name */}
-          <p className={`mt-0.5 text-sm ${highlighted ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
+          <p
+            className={`mt-0.5 whitespace-pre-line text-sm ${highlighted ? "text-primary-foreground/70" : "text-muted-foreground"}`}
+          >
             {scenario.role}
           </p>
         </div>
