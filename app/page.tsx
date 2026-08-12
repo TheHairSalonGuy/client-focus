@@ -5,7 +5,6 @@ import { TestimonialsSection } from "@/components/testimonials-section"
 import { IndustryDataSection } from "@/components/industry-data-section"
 import { FounderSection } from "@/components/founder-section"
 import { HowItWorks } from "@/components/how-it-works"
-import { PricingSection } from "@/components/pricing-section"
 import { CtaSection } from "@/components/cta-section"
 import { SiteFooter } from "@/components/site-footer"
 
@@ -59,7 +58,6 @@ export default function Home() {
 
         <TestimonialsSection />
 
-        <PricingSection />
         <FounderSection />
         <CtaSection />
       </main>

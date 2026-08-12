@@ -10,7 +10,6 @@ const links = [
   { label: "Pearl", href: "/#pearl" },
   { label: "Industry Data", href: "/#industry-data" },
   { label: "How It Works", href: "/#how-it-works" },
-  { label: "Pricing", href: "/#pricing" },
 ]
 
 function RevealLink({ label, href }: { label: string; href: string }) {
