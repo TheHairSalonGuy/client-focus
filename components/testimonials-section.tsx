@@ -10,7 +10,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react"
  * (an authorized name/company) and permission to use the image/identity.
  */
 type Attribution = "illustrative" | "verified"
-type Industry = "Law Firm" | "Dental Practice"
+type Industry = "Restaurant" | "Law Firm" | "Dental Practice"
 
 type Scenario = {
   quote: string
@@ -26,6 +26,16 @@ type Scenario = {
 }
 
 const SCENARIOS: Scenario[] = [
+  {
+    quote:
+      "Since using Ashley our lunch order increased. We had no idea how many order we missed due to busy signal. The cost was so small per hour we would be happy paying double that.",
+    name: "P' Joe",
+    role: 'Owner/Chef of "Modern Thai Cuisine"',
+    industry: "Restaurant",
+    image: "/images/testimonials/chef-joe.png",
+    alt: "Portrait of a restaurant owner and chef",
+    attribution: "illustrative",
+  },
   {
     quote:
       "Before adding Grace, we did not realize how many potential clients were calling after hours. Now every caller receives an immediate response, and our team has the information needed to follow up the next morning.",
@@ -325,13 +335,16 @@ export function TestimonialsSection() {
 }
 
 function TestimonialCard({ scenario, highlighted }: { scenario: Scenario; highlighted: boolean }) {
-  const isLaw = scenario.industry === "Law Firm"
-
   const cardClass = highlighted
     ? "bg-navy-deep text-primary-foreground shadow-xl ring-1 ring-navy-deep/20"
     : "bg-card text-card-foreground shadow-sm ring-1 ring-border"
 
-  const accentBar = isLaw ? "bg-[#e6b800]" : "bg-teal"
+  const accentBarByIndustry: Record<Industry, string> = {
+    Restaurant: "bg-[#e07a3f]",
+    "Law Firm": "bg-[#e6b800]",
+    "Dental Practice": "bg-teal",
+  }
+  const accentBar = accentBarByIndustry[scenario.industry]
 
   return (
     <article
