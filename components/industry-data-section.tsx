@@ -1,9 +1,9 @@
 "use client"
 
 import { useState } from "react"
-import { Check, ArrowRight, Scale, Stethoscope } from "lucide-react"
+import { Check, ArrowRight, Scale, Stethoscope, UtensilsCrossed } from "lucide-react"
 
-type Segment = "law" | "dental"
+type Segment = "restaurant" | "law" | "dental"
 
 type StatCard = {
   stat: string
@@ -15,6 +15,32 @@ type StatCard = {
 }
 
 const DATA: Record<Segment, StatCard[]> = {
+  restaurant: [
+    {
+      stat: "67%–70%",
+      title: "Unreachable or During Rushes",
+      desc: "Over half of customer food inquiries arrive during peak lunch and dinner rushes or go unanswered because staff are busy servicing customers in the dining room.",
+      badge: "500+ Secret Shoppers",
+      linkLabel: "Verify via Industry Studies",
+      href: "https://www.nrn.com/",
+    },
+    {
+      stat: "80%",
+      title: "Hang Up on Voicemails",
+      desc: "80% of hungry customers who hit an automated voicemail hang up without leaving a message and immediately dial the next restaurant.",
+      badge: "Restaurant Intake Audit",
+      linkLabel: "Verify via Hospitality Benchmark",
+      href: "https://www.nrn.com/",
+    },
+    {
+      stat: "$3,000 – $15,000+",
+      title: "Recovered Monthly Take-Out Revenue",
+      desc: "The total amount a restaurant earns back when 100% of take-out calls are answered and no orders are lost to busy signals or voicemails.",
+      badge: "Revenue Recovery",
+      linkLabel: "Verify via Voice Automation Data",
+      href: "https://www.nrn.com/",
+    },
+  ],
   law: [
     {
       stat: "67%–70%",
@@ -70,12 +96,13 @@ const DATA: Record<Segment, StatCard[]> = {
 }
 
 const SEGMENTS: { id: Segment; label: string; Icon: typeof Scale }[] = [
+  { id: "restaurant", label: "Restaurants", Icon: UtensilsCrossed },
   { id: "law", label: "Law Firms", Icon: Scale },
   { id: "dental", label: "Dental Practices", Icon: Stethoscope },
 ]
 
 export function IndustryDataSection() {
-  const [segment, setSegment] = useState<Segment>("law")
+  const [segment, setSegment] = useState<Segment>("restaurant")
   const cards = DATA[segment]
 
   return (
