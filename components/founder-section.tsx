@@ -42,9 +42,9 @@ export function FounderSection() {
                   I built <strong className="font-semibold text-foreground">My Virtual Receptionist</strong>{" "}
                   after seeing how many businesses lose revenue simply because their front-desk staff or admin teams
                   are
-                  overwhelmed. Whether it&apos;s answering repetitive inquiries, managing appointment bookings, or
-                  handling ongoing follow-ups, busy teams often struggle to keep up with incoming calls—especially
-                  during peak hours, lunch breaks, and after hours.
+                  overwhelmed. Whether it&apos;s answering repetitive inquiries, taking food orders, managing
+                  appointment books, or screening clients, busy teams often struggle to keep up with incoming
+                  calls—especially during peak hours, lunch breaks, and after hours.
                 </p>
                 <p>
                   When a prospective client reaches a busy tone or a voicemail box, they don&apos;t wait—they
@@ -52,7 +52,7 @@ export function FounderSection() {
                   call the next competitor on the list.
                 </p>
                 <p>
-                  My background spans operations management, financial services, software engineering, and business
+                  My background spans operations management, financial services, software engineering, and restaurant
                   ownership. Those experiences taught me a fundamental truth:{" "}
                   <strong className="font-semibold text-foreground">
                     reliable intake systems, instant communication, and efficient follow-up workflows are essential to
@@ -61,8 +61,8 @@ export function FounderSection() {
                 </p>
                 <p>
                   <strong className="font-semibold text-foreground">My Virtual Receptionist</strong> was created to
-                  bridge this gap for high-touch businesses—whether you run a law firm, dental practice, accounting
-                  firm, or home services company. We ensure every inquiry is handled seamlessly without adding
+                  bridge this gap for high-touch businesses—whether you run a restaurant, a law firm, dental practice,
+                  or accounting firm. We ensure every inquiry is handled seamlessly without adding
                   expensive administrative overhead.
                 </p>
               </div>
@@ -90,9 +90,9 @@ export function FounderSection() {
                 <div>
                   <h4 className="text-xl font-semibold text-navy-deep">Pillar 2: Total Operational Efficiency</h4>
                   <p className="mt-2">
-                    We eliminate front-desk drag by automating your most repetitive administrative tasks. From direct
-                    calendar booking and automated appointment reminders to pulling actionable post-call summaries, we
-                    turn manual busywork into a seamless background machine.
+                    We eliminate front-desk drag by automating your most repetitive administrative tasks. From taking
+                    multiple lunch orders at the same time and automating appointment reminders to pulling actionable
+                    post-call summaries, we turn manual busywork into a seamless background machine.
                   </p>
                 </div>
               </div>
@@ -108,8 +108,8 @@ export function FounderSection() {
                   When you partner with us, your business becomes predictable, efficient, and unstoppable.
                 </p>
                 <p className="mt-3 font-medium text-foreground/90">
-                  By deploying a bulletproof intake safety net and automating everyday admin tasks, we help you protect
-                  your ad spend, increase top-line revenue, and eliminate front-desk burnout. Your staff spends less
+                  By deploying a bulletproof virtual receptionist to automate everyday admin tasks, we help you capture
+                  more sales, leads, revenue and eliminate staff burnout. Your staff spends less
                   time putting out fires and more time focused on high-value, client-facing work—boosting morale across
                   your entire team while ensuring you never miss a client.
                 </p>
