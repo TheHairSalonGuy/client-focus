@@ -10,7 +10,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react"
  * (an authorized name/company) and permission to use the image/identity.
  */
 type Attribution = "illustrative" | "verified"
-type Industry = "Law Firm" | "Dental Practice"
+type Industry = "Restaurant" | "Law Firm" | "Dental Practice"
 
 type Scenario = {
   quote: string
@@ -26,6 +26,16 @@ type Scenario = {
 }
 
 const SCENARIOS: Scenario[] = [
+  {
+    quote:
+      "Since letting Ashley handle our phone lines, our lunch take-out orders have surged. We had no idea how many paying customers we were losing to busy signals until Ashley captured every single call—it's a game-changer for any restaurant looking to boost daily revenue without adding extra staff.",
+    name: "P' Joe",
+    role: 'Owner/Chef\n"Modern Thai Cuisine"',
+    industry: "Restaurant",
+    image: "/images/testimonials/chef-joe.png",
+    alt: "Portrait of a restaurant owner and chef",
+    attribution: "illustrative",
+  },
   {
     quote:
       "Before adding Grace, we did not realize how many potential clients were calling after hours. Now every caller receives an immediate response, and our team has the information needed to follow up the next morning.",
@@ -108,9 +118,9 @@ const SCENARIOS: Scenario[] = [
   },
   {
     quote:
-      "When a caller needs to provide detailed case information, our staff can transfer the call to Grace. She follows the approved intake process and sends us an organized summary for review. She even books clients on our calendar. Amazing!",
+      "When customers called during peak lunch hours, they used to hit busy signals. Since hiring Ashley Virtual Waitress, our take-out orders have doubled because she handles multiple callers simultaneously. Best decision we've made for the restaurant!",
     name: "Susan Cho",
-    role: "Legal Office Manager",
+    role: "Restaurant Owner",
     industry: "Law Firm",
     image: "/images/testimonials/photo-9.jpg",
     alt: "Portrait of a legal office manager",
@@ -325,13 +335,16 @@ export function TestimonialsSection() {
 }
 
 function TestimonialCard({ scenario, highlighted }: { scenario: Scenario; highlighted: boolean }) {
-  const isLaw = scenario.industry === "Law Firm"
-
   const cardClass = highlighted
     ? "bg-navy-deep text-primary-foreground shadow-xl ring-1 ring-navy-deep/20"
     : "bg-card text-card-foreground shadow-sm ring-1 ring-border"
 
-  const accentBar = isLaw ? "bg-[#e6b800]" : "bg-teal"
+  const accentBarByIndustry: Record<Industry, string> = {
+    Restaurant: "bg-[#e07a3f]",
+    "Law Firm": "bg-[#e6b800]",
+    "Dental Practice": "bg-teal",
+  }
+  const accentBar = accentBarByIndustry[scenario.industry]
 
   return (
     <article
@@ -365,7 +378,9 @@ function TestimonialCard({ scenario, highlighted }: { scenario: Scenario; highli
             {scenario.name}
           </p>
           {/* Title moved down one row, below the name */}
-          <p className={`mt-0.5 text-sm ${highlighted ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
+          <p
+            className={`mt-0.5 whitespace-pre-line text-sm ${highlighted ? "text-primary-foreground/70" : "text-muted-foreground"}`}
+          >
             {scenario.role}
           </p>
         </div>

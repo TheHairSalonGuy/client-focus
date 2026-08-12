@@ -5,7 +5,6 @@ import { TestimonialsSection } from "@/components/testimonials-section"
 import { IndustryDataSection } from "@/components/industry-data-section"
 import { FounderSection } from "@/components/founder-section"
 import { HowItWorks } from "@/components/how-it-works"
-import { PricingSection } from "@/components/pricing-section"
 import { CtaSection } from "@/components/cta-section"
 import { SiteFooter } from "@/components/site-footer"
 
@@ -17,6 +16,24 @@ export default function Home() {
         <Hero />
 
         <ReceptionistSection
+          id="ashley"
+          eyebrow="Ashley — For Restaurants"
+          name="Ashley"
+          role="Virtual Waitress for Restaurants"
+          description="Experience Ashley, your restaurant's virtual waitress, by calling the number below. Pretend you're a hungry customer calling during peak dinner rush—place a take-out order, ask about menu items, and interrupt her to test how naturally she responds. Ashley handles multiple callers simultaneously so you never lose an order to a busy signal, and we believe she can deliver the same exceptional experience for yours."
+          phoneDisplay="(626) 888-5138"
+          phoneHref="tel:+16268885138"
+          callLabel="Call Ashley"
+          capabilities={[
+            "Available 24/7—including after hours, weekends, and peak lunch/dinner rushes",
+            "Answer multiple calls at the same time so customers never hit a busy signal and ALL orders are captured instantly",
+            "Handle routine menu FAQs and take-out orders, saving your waitresses hours of phone duty and freeing them up to better service dining-in customers",
+            "Reduce labor costs ($1600+ per month). When you switch to using Ashley you'll save thousands",
+            "Deliver an organized order summary and text payment links so you get paid before the kitchen starts cooking, eliminating unpaid or wasted food",
+          ]}
+        />
+
+        <ReceptionistSection
           id="grace"
           eyebrow="Grace — For Law Firms"
           name="Grace"
@@ -25,6 +42,7 @@ export default function Home() {
           phoneDisplay="(626) 774-8018"
           phoneHref="tel:+16267748018"
           callLabel="Call Grace"
+          align="right"
           capabilities={[
             "Available 24/7—including after hours, weekends, and lunch breaks",
             "Answer multiple calls at the same time so potential clients receive an immediate response",
@@ -43,7 +61,6 @@ export default function Home() {
           phoneDisplay="(626) 657-2129"
           phoneHref="tel:+16266572129"
           callLabel="Call Pearl"
-          align="right"
           capabilities={[
             "Available 24/7—including after hours, weekends, and lunch breaks",
             "Answer multiple calls at the same time so current and prospective patients receive an immediate response",
@@ -59,7 +76,6 @@ export default function Home() {
 
         <TestimonialsSection />
 
-        <PricingSection />
         <FounderSection />
         <CtaSection />
       </main>
