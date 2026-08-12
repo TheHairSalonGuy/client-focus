@@ -108,9 +108,9 @@ const SCENARIOS: Scenario[] = [
   },
   {
     quote:
-      "When a caller needs to provide detailed case information, our staff can transfer the call to Grace. She follows the approved intake process and sends us an organized summary for review. She even books clients on our calendar. Amazing!",
+      "When customers called during peak lunch hours, they used to hit busy signals. Since hiring Ashley Virtual Waitress, our take-out orders have doubled because she handles multiple callers simultaneously. Best decision we've made for the restaurant!",
     name: "Susan Cho",
-    role: "Legal Office Manager",
+    role: "Restaurant Owner",
     industry: "Law Firm",
     image: "/images/testimonials/photo-9.jpg",
     alt: "Portrait of a legal office manager",
