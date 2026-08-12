@@ -1,6 +1,6 @@
 const steps = [
   {
-    title: "Call Grace or Pearl",
+    title: "Call Ashley, Grace, or Pearl",
     body: "Dial the number and hear the experience for yourself, no setup required.",
   },
   {
@@ -9,11 +9,11 @@ const steps = [
   },
   {
     title: "Book a Discovery Call",
-    body: "Talk through your business, your callers, and what a great call looks like.",
+    body: "Share what repetitive business tasks are eating your staff's time. What do you want to see improved?",
   },
   {
     title: "We customize the system for your business",
-    body: "We tailor the receptionist to your practice, your intake, and your follow-up.",
+    body: "We tailor your virtual receptionist/waitress to fit your business operation.",
   },
   {
     title: "Start capturing calls your team might otherwise miss",
