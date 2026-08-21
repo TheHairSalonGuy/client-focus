@@ -75,7 +75,8 @@ export const QUESTIONS: Question[] = [
   {
     id: "missedCalls",
     type: "choice",
-    prompt: "On a typical day, how many calls does your office miss, send to voicemail, or fail to answer in time?",
+    prompt:
+      "On a typical day, how many calls does your restaurant miss, send to voicemail, or fail to answer in time?",
     helper: "Include busy signals, after-hours calls, and callers who hang up before someone answers.",
     options: ["1–3 calls", "4–7 calls", "8–12 calls", "13 or more calls"],
   },
@@ -83,33 +84,35 @@ export const QUESTIONS: Question[] = [
     id: "whenMissed",
     type: "choice",
     prompt: "When do most of these missed calls happen?",
-    helper: "Callers who reach voicemail after hours rarely call back—they call the next office.",
+    helper:
+      "Callers who reach voicemail during business hours or after hours rarely leave a message or call back—they call the next restaurant.",
     options: [
-      "During busy front-desk hours",
-      "During lunch and staff breaks",
+      "During peak lunch and dining hours",
+      "During staff breaks",
       "After hours and on weekends",
-      "A mix throughout the day",
+      "When front desk is servicing walk-in customers",
     ],
   },
   {
     id: "clientValue",
     type: "number",
-    prompt: "What is the average revenue from a new client, patient, or case?",
-    helper: "A rough lifetime or first-engagement value is fine—this drives your opportunity estimate.",
+    prompt: "What is the average transaction from one order, transaction, or reservation?",
+    helper: "Your best rough estimate value is fine—this drives your opportunity estimate.",
     prefix: "$",
-    placeholder: "3,000",
+    placeholder: "85",
   },
   {
-    id: "conversion",
+    id: "visitFrequency",
     type: "choice",
-    prompt: "Of the new callers who actually reach your team, about how many become paying clients?",
-    options: ["About 1 in 4 (25%)", "About 1 in 3 (35%)", "About half (50%)", "More than half (65%)"],
+    prompt: "How often do your regular customers visit your restaurant per year?",
+    helper: "This helps calculate the lifetime customer value of captured calls.",
+    options: ["Once a week", "Twice a week", "Once a month", "Once every 3 months"],
   },
   {
     id: "phoneTime",
     type: "choice",
-    prompt: "How much time does your front-desk team spend handling phone calls each day?",
-    helper: "Time on the phone is time not spent with patients in the office.",
+    prompt: "How much time does your front desk team spend asking repetitive questions calls each day?",
+    helper: "Time on the phone is time not spent servicing walk-in customers.",
     options: ["Less than 1 hour", "1–2 hours", "2–4 hours", "More than 4 hours"],
   },
 ]
@@ -128,8 +131,11 @@ const CALL_RANGES: { min: number; max: number }[] = [
   { min: 13, max: 18 },
 ]
 
-/** Conversion percentages keyed to the "conversion" options. */
-const CONVERSION_RATES = [25, 35, 50, 65]
+/**
+ * Annual visit counts keyed to the "visitFrequency" options. Used for the
+ * lifetime-value figure (average transaction × visits per year).
+ */
+const VISITS_PER_YEAR = [52, 104, 12, 4]
 
 /** Daily front-desk phone-time (recoverable hours) keyed to "phoneTime". */
 const HOURS_RANGES: { min: number; max: number }[] = [
@@ -149,9 +155,9 @@ const LABOR_RATE = 22
 const DEFAULTS = {
   missedCalls: 1,
   whenMissed: 3,
-  conversion: 1,
+  visitFrequency: 2,
   phoneTime: 1,
-  clientValue: 3000,
+  clientValue: 85,
 }
 
 /* --------------------------------- Helpers ---------------------------------- */
@@ -179,12 +185,16 @@ function round(n: number): number {
 export interface AssessmentMetrics {
   /** Inputs echoed back for transparency. */
   clientValue: number
-  conversionPercent: number
+  visitsPerYear: number
+  /** Average transaction × visits per year. */
+  lifetimeValue: number
   /** Daily unanswered-call range and its midpoint. */
   minCalls: number
   maxCalls: number
   midpointCalls: number
-  /** Estimated monthly revenue opportunity range and midpoint. */
+  /** Missed calls per month (midpoint daily calls × 30). */
+  missedCallsPerMonth: number
+  /** Estimated monthly sales lost range and midpoint. */
   minRevenue: number
   maxRevenue: number
   midpointRevenue: number
@@ -199,24 +209,26 @@ export interface AssessmentMetrics {
 /**
  * Derive the business metrics from the answers.
  *
- * Revenue model (must stay in sync with the calculation line rendered in
+ * Models (must stay in sync with the calculation line rendered in
  * results-view.tsx):
- *   revenue = unanswered calls/day × average client value × 30 days × conversion
+ *   missed calls / month = missed calls per day × 30
+ *   sales lost / month   = missed calls per day × average transaction × 30
  */
 export function calculateMetrics(answers: Answers): AssessmentMetrics {
   const callIdx = choiceIndex(answers, "missedCalls", CALL_RANGES.length, DEFAULTS.missedCalls)
-  const convIdx = choiceIndex(answers, "conversion", CONVERSION_RATES.length, DEFAULTS.conversion)
+  const visitIdx = choiceIndex(answers, "visitFrequency", VISITS_PER_YEAR.length, DEFAULTS.visitFrequency)
   const hoursIdx = choiceIndex(answers, "phoneTime", HOURS_RANGES.length, DEFAULTS.phoneTime)
 
   const clientValue = clientValueOf(answers)
-  const conversionPercent = CONVERSION_RATES[convIdx]
-  const conversion = conversionPercent / 100
+  const visitsPerYear = VISITS_PER_YEAR[visitIdx]
+  const lifetimeValue = round(clientValue * visitsPerYear)
 
   const minCalls = CALL_RANGES[callIdx].min
   const maxCalls = CALL_RANGES[callIdx].max
   const midpointCalls = round((minCalls + maxCalls) / 2)
+  const missedCallsPerMonth = round(midpointCalls * 30)
 
-  const revenueFor = (calls: number) => round(calls * clientValue * 30 * conversion)
+  const revenueFor = (calls: number) => round(calls * clientValue * 30)
   const minRevenue = revenueFor(minCalls)
   const maxRevenue = revenueFor(maxCalls)
   const midpointRevenue = revenueFor(midpointCalls)
@@ -228,10 +240,12 @@ export function calculateMetrics(answers: Answers): AssessmentMetrics {
 
   return {
     clientValue,
-    conversionPercent,
+    visitsPerYear,
+    lifetimeValue,
     minCalls,
     maxCalls,
     midpointCalls,
+    missedCallsPerMonth,
     minRevenue,
     maxRevenue,
     midpointRevenue,
@@ -250,24 +264,25 @@ export function calculateMetrics(answers: Answers): AssessmentMetrics {
  *   - volume of missed calls  (max 35)
  *   - front-desk phone burden (max 25)
  *   - when calls are missed   (max 25, after-hours weighted highest)
- *   - conversion strength     (max 15, high conversion = each miss costs more)
+ *   - visit frequency         (max 15, frequent regulars = each miss costs more)
  */
 export function calculateScore(answers: Answers): number {
   const callIdx = choiceIndex(answers, "missedCalls", CALL_RANGES.length, DEFAULTS.missedCalls)
-  const convIdx = choiceIndex(answers, "conversion", CONVERSION_RATES.length, DEFAULTS.conversion)
+  const visitIdx = choiceIndex(answers, "visitFrequency", VISITS_PER_YEAR.length, DEFAULTS.visitFrequency)
   const hoursIdx = choiceIndex(answers, "phoneTime", HOURS_RANGES.length, DEFAULTS.phoneTime)
   const whenIdx = choiceIndex(answers, "whenMissed", WHEN_MISSED_WEIGHT.length, DEFAULTS.whenMissed)
 
   const lastCall = CALL_RANGES.length - 1
   const lastHours = HOURS_RANGES.length - 1
-  const lastConv = CONVERSION_RATES.length - 1
+  const maxVisits = Math.max(...VISITS_PER_YEAR)
 
   const callScore = (callIdx / lastCall) * 35
   const hoursScore = (hoursIdx / lastHours) * 25
-  const convScore = (convIdx / lastConv) * 15
+  // Visit frequency is not ordered by index, so scale on the visit count itself.
+  const visitScore = (VISITS_PER_YEAR[visitIdx] / maxVisits) * 15
   const whenScore = WHEN_MISSED_WEIGHT[whenIdx]
 
-  const total = callScore + hoursScore + convScore + whenScore
+  const total = callScore + hoursScore + visitScore + whenScore
   return Math.min(100, Math.max(0, Math.round(total)))
 }
 

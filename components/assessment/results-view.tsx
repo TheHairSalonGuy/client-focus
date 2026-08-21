@@ -97,11 +97,12 @@ export function ResultsView({
 
   // Animated figures.
   const revenue = useCountUp(metrics.midpointRevenue, { duration: 1300 })
+  const missedCalls = useCountUp(metrics.missedCallsPerMonth, { duration: 1300 })
   const hourly = useCountUp(PLAN_RATES[plan], { duration: 900, decimals: 2 })
 
   function scrollToCall() {
-    // "Call to Test" returns to the main site and scrolls to the Grace/Pearl demo section.
-    window.location.href = "/#grace"
+    // "Call to Test" returns to the main site and scrolls to the Ashley demo section.
+    window.location.href = "/#ashley"
   }
 
   return (
@@ -119,50 +120,26 @@ export function ResultsView({
           className="object-cover"
         />
 
-        {/* Left hand — compact baby-blue hourly box + plan toggle, resting directly
-            on top of the woman's open palm (viewer's left). */}
-        <div className="absolute left-[8%] top-[58%] w-[20%] max-w-[190px]">
+        {/* Left hand — missed-call volume metric, resting on the woman's open palm. */}
+        <div className="absolute left-[8%] top-[56%] w-[22%] max-w-[200px]">
           <div className="rounded-2xl border-2 border-navy-deep bg-sky-100 px-1.5 py-2 text-center shadow-lg sm:px-2.5 sm:py-3">
-            <p className="font-serif text-lg font-normal leading-none text-navy-deep sm:text-2xl md:text-3xl">
-              ${hourly.toFixed(2)}
-              <span className="font-sans text-[11px] font-semibold text-muted-foreground sm:text-sm">/hour</span>
+            <p className="font-serif text-xl font-normal leading-none text-navy-deep sm:text-3xl md:text-4xl">
+              {missedCalls.toLocaleString("en-US")}
             </p>
-
-            {/* Compact toggle — only swaps the hourly figure above */}
-            <div
-              role="group"
-              aria-label="Choose plan"
-              className="mt-1.5 inline-flex rounded-full border border-border bg-muted p-0.5 sm:mt-2"
-            >
-              {(Object.keys(PLAN_RATES) as PlanKey[]).map((key) => {
-                const active = plan === key
-                return (
-                  <button
-                    key={key}
-                    type="button"
-                    onClick={() => setPlan(key)}
-                    aria-pressed={active}
-                    className={`rounded-full px-2 py-0.5 text-[9px] font-semibold transition-colors sm:px-2.5 sm:py-1 sm:text-xs ${
-                      active ? "bg-navy-deep text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
-                    }`}
-                  >
-                    {key}
-                  </button>
-                )
-              })}
-            </div>
-
-            {/* "Plan" label directly below the toggle */}
-            <p className="mt-0.5 text-[9px] font-medium leading-none text-muted-foreground">Plan</p>
+            <p className="mt-1 text-[9px] font-semibold uppercase leading-tight tracking-wide text-muted-foreground sm:text-[11px]">
+              Total Missed Calls / Month
+            </p>
           </div>
         </div>
 
-        {/* Right hand — solid-white monthly revenue box, ~15% smaller and centered
-            directly over the stack of money. */}
-        <div className="absolute right-[9%] top-[44%] w-[24%] max-w-[222px]">
+        {/* Right hand — main financial impact, centered over the stack of money. */}
+        <div className="absolute right-[9%] top-[42%] w-[24%] max-w-[222px]">
           <div className="rounded-2xl border-2 border-success bg-sky-100 px-2 py-1.5 text-center shadow-lg sm:px-2.5 sm:py-2.5">
             <p className="font-serif text-xl font-normal leading-none text-success sm:text-3xl md:text-4xl">
               {money(revenue)}
+            </p>
+            <p className="mt-1 text-[9px] font-semibold uppercase leading-tight tracking-wide text-muted-foreground sm:text-[11px]">
+              Estimated Monthly Sales Lost
             </p>
           </div>
         </div>
@@ -174,11 +151,41 @@ export function ResultsView({
       <div className="mx-auto mt-8 max-w-5xl">
         {/* Main paragraph — copy changes based on the selected plan; the revenue
             figure stays dynamic (derived from the assessment answers). */}
+        {/* Plan toggle — swaps the hourly figure quoted in the paragraph below. */}
+        <div
+          role="group"
+          aria-label="Choose plan"
+          className="mb-5 inline-flex rounded-full border border-border bg-muted p-1"
+        >
+          {(Object.keys(PLAN_RATES) as PlanKey[]).map((key) => {
+            const active = plan === key
+            return (
+              <button
+                key={key}
+                type="button"
+                onClick={() => setPlan(key)}
+                aria-pressed={active}
+                className={`rounded-full px-4 py-1.5 text-sm font-semibold transition-colors ${
+                  active ? "bg-navy-deep text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {key} Plan
+              </button>
+            )
+          })}
+        </div>
+
         <div className="space-y-4 text-pretty text-lg leading-relaxed text-foreground">
           <p>
-            Based on your assessment answers, your office has an estimated{" "}
-            <strong className="font-bold text-navy-deep">{money(metrics.midpointRevenue)}</strong> monthly revenue
-            opportunity from unanswered calls.
+            Based on your assessment answers, your restaurant is losing an estimated{" "}
+            <strong className="font-bold text-navy-deep">{money(metrics.midpointRevenue)}</strong> in sales each month
+            from unanswered calls—about{" "}
+            <strong className="font-bold text-navy-deep">
+              {metrics.missedCallsPerMonth.toLocaleString("en-US")}
+            </strong>{" "}
+            missed calls. At {money(metrics.clientValue)} per transaction and {metrics.visitsPerYear} visits a year,
+            each regular you capture is worth{" "}
+            <strong className="font-bold text-navy-deep">{money(metrics.lifetimeValue)}</strong> a year.
           </p>
 
           {plan === "Essential" ? (
@@ -219,9 +226,10 @@ export function ResultsView({
 
         {/* Calculation */}
         <p className="mt-6 text-sm leading-relaxed text-muted-foreground">
-          Calculation: {metrics.midpointCalls} unanswered calls per day × {money(metrics.clientValue)} average client
-          value × 30 days × {metrics.conversionPercent}% conversion rate ={" "}
-          {money(metrics.midpointRevenue)} estimated monthly revenue opportunity.
+          Calculation: {metrics.midpointCalls} missed calls per day × 30 days ={" "}
+          {metrics.missedCallsPerMonth.toLocaleString("en-US")} total missed calls per month.{" "}
+          {metrics.midpointCalls} missed calls per day × {money(metrics.clientValue)} average transaction × 30 days ={" "}
+          {money(metrics.midpointRevenue)} estimated monthly sales lost.
         </p>
 
         {/* Disclaimer — directly below the calculation line */}

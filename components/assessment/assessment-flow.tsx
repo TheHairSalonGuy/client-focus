@@ -500,7 +500,7 @@ function NumberQuestion({
             }
           }}
           placeholder={placeholder}
-          aria-label="Average revenue per new client in dollars"
+          aria-label="Average transaction value in dollars"
           aria-invalid={error ? true : undefined}
           className={`w-full rounded-xl border bg-card py-4 pr-5 text-2xl font-semibold text-foreground shadow-sm outline-none transition-colors placeholder:font-normal placeholder:text-muted-foreground focus:ring-2 focus:ring-teal/40 ${
             prefix ? "pl-11" : "pl-5"
