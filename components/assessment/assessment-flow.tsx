@@ -197,7 +197,7 @@ function IntroStep({ onStart }: { onStart: () => void }) {
         <button
           type="button"
           onClick={onStart}
-          className="group relative isolate inline-flex items-center justify-center gap-2 overflow-hidden rounded-full bg-[var(--yellow-cta)] px-[5.5rem] py-4 text-lg font-semibold text-navy-deep transition-all duration-300 hover:brightness-105 hover:shadow-[0_0_28px_-4px_color-mix(in_oklch,var(--yellow-cta)_80%,transparent)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[color-mix(in_oklch,var(--yellow-cta)_60%,transparent)]"
+          className="group relative isolate inline-flex items-center justify-center gap-2 overflow-hidden rounded-full bg-[var(--yellow-cta)] px-[5.5rem] py-4 text-lg font-semibold text-[var(--yellow-cta-ink)] transition-all duration-300 hover:brightness-105 hover:shadow-[0_0_28px_-4px_color-mix(in_oklch,var(--yellow-cta)_80%,transparent)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[color-mix(in_oklch,var(--yellow-cta)_60%,transparent)]"
         >
           <span aria-hidden="true" className="cta-runner" />
           <span className="relative z-[1] inline-flex items-center gap-2">

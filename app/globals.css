@@ -68,8 +68,10 @@
   --teal-bright: oklch(0.48 0.11 202);
   /* Refined warm gold for the "VIRTUAL RECEPTIONIST" wordmark accent (~#D4A834) */
   --gold: #d4a834;
-  /* Bright CTA yellow — lighter than the wordmark gold so black text pops on it */
-  --yellow-cta: #ffd633;
+  /* Bright CTA yellow sampled from the reference "Add to cart" button (#FDD73A) */
+  --yellow-cta: #fdd73a;
+  /* Near-black label used on the yellow CTA, matching the reference button */
+  --yellow-cta-ink: oklch(0.15 0 0);
   --coral: oklch(0.64 0.16 30);
   /* Emerald green for the "Revenue Opportunity" side of the results comparison */
   --success: oklch(0.58 0.14 155);
