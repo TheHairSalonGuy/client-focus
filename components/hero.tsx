@@ -45,6 +45,13 @@ const BENEFITS: Benefit[] = [
 // Ordered carousel slides. Index 0 (Fine Dining) is shown on page load.
 const SLIDES: Slide[] = [
   {
+    id: "thai-restaurant",
+    label: "Full-Service Restaurant",
+    src: "/hero-thai-restaurant.png",
+    alt: "An Asian female restaurant host in a navy blazer with gold trim smiling while taking a phone call at a wooden host podium in a warm, upscale Thai restaurant with diners and a lit water feature in the background",
+    objectPosition: "object-[60%_28%]",
+  },
+  {
     id: "fine-dining",
     label: "Fine Dining",
     src: "/hero-fine-dining.png",
