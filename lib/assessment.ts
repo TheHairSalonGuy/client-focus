@@ -110,7 +110,7 @@ export const QUESTIONS: Question[] = [
   {
     id: "phoneTime",
     type: "choice",
-    prompt: "How much time does your front desk team spend asking repetitive questions calls each day?",
+    prompt: "How much time does your front desk team spend answering repetitive questions calls each day?",
     helper: "Time on the phone is time not spent servicing walk-in customers.",
     options: ["Less than 1 hour", "1–2 hours", "2–4 hours", "More than 4 hours"],
   },
