@@ -160,8 +160,9 @@ export function ResultsView({
             <strong className="font-bold text-navy-deep">
               {metrics.recoveredHoursPerMonth.toLocaleString("en-US")}
             </strong>{" "}
-            hours per month, and your business will potentially capture up to{" "}
-            <strong className="font-bold text-navy-deep">{money(metrics.annualRevenue)}</strong>.
+            hours per month, and your business will potentially get back{" "}
+            <strong className="font-bold text-navy-deep">{money(metrics.midpointRevenue)}</strong> monthly revenue
+            belonging to your business.
           </p>
 
           <p>
