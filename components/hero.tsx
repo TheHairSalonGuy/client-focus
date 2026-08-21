@@ -46,7 +46,7 @@ const BENEFITS: Benefit[] = [
 const SLIDES: Slide[] = [
   {
     id: "thai-restaurant",
-    label: "Full-Service Restaurant",
+    label: "Asian Dining",
     src: "/hero-thai-restaurant.png",
     alt: "An Asian female restaurant host in a navy blazer with gold trim smiling while taking a phone call at a wooden host podium in a warm, upscale Thai restaurant with diners and a lit water feature in the background",
     objectPosition: "object-[60%_28%]",
@@ -74,7 +74,7 @@ const SLIDES: Slide[] = [
   },
   {
     id: "bar-grill",
-    label: "Bar & Grill",
+    label: "Sports Bar Bistro",
     src: "/hero-bar-grill.png",
     alt: "A casual young female bartender in a black branded tee smiling while taking a call at the host stand of a sports bar with TVs, exposed brick, and string lights in the background",
     objectPosition: "object-[50%_28%]",
@@ -87,6 +87,10 @@ export function Hero() {
 
   const goPrev = () => setIndex((i) => (i - 1 + SLIDES.length) % SLIDES.length)
   const goNext = () => setIndex((i) => (i + 1) % SLIDES.length)
+
+  // Labels for the slides the arrows will reveal, surfaced as hover tooltips.
+  const prevLabel = SLIDES[(index - 1 + SLIDES.length) % SLIDES.length].label
+  const nextLabel = SLIDES[(index + 1) % SLIDES.length].label
 
   return (
     <section id="top" className="relative w-full">
@@ -190,17 +194,23 @@ export function Hero() {
             type="button"
             onClick={goPrev}
             className="group absolute left-4 top-1/2 z-30 flex h-14 w-14 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-card/90 text-foreground shadow-lg backdrop-blur-md transition-all duration-300 hover:h-16 hover:w-16 hover:bg-teal hover:text-primary-foreground hover:shadow-[0_0_40px_-6px_color-mix(in_oklch,var(--teal)_80%,transparent)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-teal/60 md:left-6"
-            aria-label="Previous slide"
+            aria-label={`Previous slide: ${prevLabel}`}
           >
             <ChevronLeft className="h-6 w-6 transition-all duration-300 group-hover:h-8 group-hover:w-8" />
+            <span className="pointer-events-none absolute left-full ml-3 whitespace-nowrap rounded-full bg-navy-deep/90 px-3 py-1.5 text-sm font-semibold text-primary-foreground opacity-0 shadow-lg backdrop-blur-md transition-opacity duration-200 group-hover:opacity-100">
+              {prevLabel}
+            </span>
           </button>
           <button
             type="button"
             onClick={goNext}
             className="group absolute right-4 top-1/2 z-30 flex h-14 w-14 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-card/90 text-foreground shadow-lg backdrop-blur-md transition-all duration-300 hover:h-16 hover:w-16 hover:bg-teal hover:text-primary-foreground hover:shadow-[0_0_40px_-6px_color-mix(in_oklch,var(--teal)_80%,transparent)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-teal/60 md:right-6"
-            aria-label="Next slide"
+            aria-label={`Next slide: ${nextLabel}`}
           >
             <ChevronRight className="h-6 w-6 transition-all duration-300 group-hover:h-8 group-hover:w-8" />
+            <span className="pointer-events-none absolute right-full mr-3 whitespace-nowrap rounded-full bg-navy-deep/90 px-3 py-1.5 text-sm font-semibold text-primary-foreground opacity-0 shadow-lg backdrop-blur-md transition-opacity duration-200 group-hover:opacity-100">
+              {nextLabel}
+            </span>
           </button>
 
           {/* Slide indicator dots */}
