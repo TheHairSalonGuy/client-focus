@@ -76,8 +76,8 @@ const SLIDES: Slide[] = [
     id: "bar-grill",
     label: "Sports Bar Bistro",
     src: "/hero-bar-grill.png",
-    alt: "A casual young female bartender in a black branded tee smiling while taking a call at the host stand of a sports bar with TVs, exposed brick, and string lights in the background",
-    objectPosition: "object-[50%_28%]",
+    alt: "A blonde female sports-bar host in a black Endzone Sports Bar tee smiling while taking a phone call at a wooden host podium with a tablet, in front of exposed brick, warm string lights, TVs showing football, and patrons at tables",
+    objectPosition: "object-[60%_28%]",
   },
 ]
 
