@@ -14,32 +14,22 @@ export type SubmitState = "idle" | "submitting" | "done" | "error"
  *
  * A deliberately simple, image-led layout:
  *   1. Wide comparison image (~80% of the section) with only two dollar amounts
- *      overlaid — a navy-bordered hourly box above her left hand (with a compact
- *      Essential/Professional toggle) and a green-bordered monthly revenue box
- *      above the money in her right hand. No labels or paragraphs over the woman.
+ *      overlaid — a navy-bordered missed-call box above her left hand and a
+ *      green-bordered monthly revenue box above the money in her right hand. No
+ *      labels or paragraphs over the woman.
  *   2. A plain-text explanation + transparent calculation + disclaimer (no cards).
  *   3. Two CTAs: "Call to Test" (scrolls home to the Grace/Pearl section) and
  *      "Book a Demo" (Calendly).
  *
- * Every figure is derived from the assessment answers (buildResult -> metrics);
- * only the two fixed hourly plan rates are hardcoded (they are pricing, not data).
+ * Every figure is derived from the assessment answers (buildResult -> metrics).
  */
-
-// Fixed hourly investment rates. These are plan prices, NOT assessment-derived values.
-// The toggle only swaps between these two numbers — it never touches the revenue math.
-const PLAN_RATES = {
-  Professional: 6.24,
-  Essential: 3.11,
-} as const
-
-type PlanKey = keyof typeof PLAN_RATES
 
 /* --------------------------------- Count-up hook -------------------------------- */
 
 /**
  * Smoothly animates a number up to `target` using an ease-out curve. On mount it
- * counts up from 0; when `target` changes (plan toggle) it animates from the last
- * settled value. Honors prefers-reduced-motion by snapping instantly.
+ * counts up from 0; when `target` changes it animates from the last settled
+ * value. Honors prefers-reduced-motion by snapping instantly.
  */
 function useCountUp(target: number, { duration = 1200, decimals = 0 }: { duration?: number; decimals?: number } = {}) {
   const [value, setValue] = useState(0)
@@ -93,12 +83,11 @@ export function ResultsView({
   submitState?: SubmitState
 }) {
   const { metrics } = buildResult(answers)
-  const [plan, setPlan] = useState<PlanKey>("Professional")
 
   // Animated figures.
   const revenue = useCountUp(metrics.midpointRevenue, { duration: 1300 })
+  const annual = useCountUp(metrics.annualRevenue, { duration: 1300 })
   const missedCalls = useCountUp(metrics.missedCallsPerMonth, { duration: 1300 })
-  const hourly = useCountUp(PLAN_RATES[plan], { duration: 900, decimals: 2 })
 
   function scrollToCall() {
     // "Call to Test" returns to the main site and scrolls to the Ashley demo section.
@@ -149,59 +138,35 @@ export function ResultsView({
       {/* max-w-5xl matches the hero image width, so the left/right text edges line
           up vertically with the image borders above. */}
       <div className="mx-auto mt-8 max-w-5xl">
-        {/* Main paragraph — copy changes based on the selected plan; the revenue
-            figure stays dynamic (derived from the assessment answers). */}
-        {/* Plan toggle — swaps the hourly figure quoted in the paragraph below. */}
-        <div
-          role="group"
-          aria-label="Choose plan"
-          className="mb-5 inline-flex rounded-full border border-border bg-muted p-1"
-        >
-          {(Object.keys(PLAN_RATES) as PlanKey[]).map((key) => {
-            const active = plan === key
-            return (
-              <button
-                key={key}
-                type="button"
-                onClick={() => setPlan(key)}
-                aria-pressed={active}
-                className={`rounded-full px-4 py-1.5 text-sm font-semibold transition-colors ${
-                  active ? "bg-navy-deep text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                {key} Plan
-              </button>
-            )
-          })}
-        </div>
-
+        {/* Main copy — every figure is derived from the assessment answers. The two
+            headline amounts (monthly and annual sales lost) are set two type steps
+            above the body text so they read at a glance. */}
         <div className="space-y-4 text-pretty text-lg leading-relaxed text-foreground">
           <p>
             Based on your assessment answers, your restaurant is losing an estimated{" "}
-            <strong className="font-bold text-navy-deep">{money(metrics.midpointRevenue)}</strong> in sales each month
-            from unanswered calls—about{" "}
-            <strong className="font-bold text-navy-deep">
-              {metrics.missedCallsPerMonth.toLocaleString("en-US")}
-            </strong>{" "}
-            missed calls. At {money(metrics.clientValue)} per transaction and {metrics.visitsPerYear} visits a year,
-            each regular you capture is worth{" "}
-            <strong className="font-bold text-navy-deep">{money(metrics.lifetimeValue)}</strong> a year.
+            <strong className="align-baseline text-xl font-bold text-navy-deep md:text-2xl">{money(revenue)}</strong>{" "}
+            per month from unanswered calls, or{" "}
+            <strong className="align-baseline text-xl font-bold text-navy-deep md:text-2xl">{money(annual)}</strong> per
+            year ({money(metrics.midpointRevenue)}
+            {" \u00D7 12"}). In addition, your customers frequent your restaurant
+            regularly — {metrics.visitFrequencyPhrase} — that&apos;s another{" "}
+            <strong className="font-bold text-navy-deep">{money(metrics.lifetimeValue)}</strong> per customer that
+            should have come to your business if all calls were answered.
           </p>
 
-          {plan === "Essential" ? (
-            <p>
-              With the <strong className="font-bold text-navy-deep">Essential Plan</strong>, your Virtual Receptionist
-              costs only <strong className="font-bold text-navy-deep">$3.11 per hour</strong> to answer calls 24/7,
-              gather the caller&apos;s reason for calling, and send an organized summary directly to your email inbox.
-            </p>
-          ) : (
-            <p>
-              With the <strong className="font-bold text-navy-deep">Professional Plan</strong>, your Virtual
-              Receptionist costs only <strong className="font-bold text-navy-deep">$6.24 per hour</strong> to handle
-              multiple calls at once 24/7, collect full intake details, prepare organized summaries, book appointments,
-              and send automatic reminders.
-            </p>
-          )}
+          <p>
+            Based on your result, we strongly recommend deploying our Virtual Receptionist. All calls will be answered,
+            your staff will get back{" "}
+            <strong className="font-bold text-navy-deep">
+              {metrics.recoveredHoursPerMonth.toLocaleString("en-US")}
+            </strong>{" "}
+            hours per month, and your business will potentially capture up to{" "}
+            <strong className="font-bold text-navy-deep">{money(metrics.annualRevenue)}</strong>.
+          </p>
+
+          <p>
+            Click &quot;Book a Demo&quot; below and speak with our Customer Success Team Member.
+          </p>
         </div>
 
         {/* CTAs — moved up one row, immediately below the main paragraph */}

@@ -105,7 +105,7 @@ export const QUESTIONS: Question[] = [
     type: "choice",
     prompt: "How often do your regular customers visit your restaurant per year?",
     helper: "This helps calculate the lifetime customer value of captured calls.",
-    options: ["Once a week", "Twice a week", "Once a month", "Once every 3 months"],
+    options: ["Once a week", "Twice a month", "Once a month", "Once every 3 months"],
   },
   {
     id: "phoneTime",
@@ -133,8 +133,16 @@ const CALL_RANGES: { min: number; max: number }[] = [
 /**
  * Annual visit counts keyed to the "visitFrequency" options. Used for the
  * lifetime-value figure (average transaction × visits per year).
+ * "Twice a month" = 24 visits a year.
  */
-const VISITS_PER_YEAR = [52, 104, 12, 4]
+const VISITS_PER_YEAR = [52, 24, 12, 4]
+
+/**
+ * Lowercase phrasings of the "visitFrequency" options, used inline in the
+ * results copy ("your customers frequent your restaurant regularly — once every
+ * week —"). Index-aligned with the options above.
+ */
+const VISIT_FREQUENCY_PHRASES = ["once every week", "twice every month", "once every month", "once every 3 months"]
 
 /** Daily front-desk phone-time (recoverable hours) keyed to "phoneTime". */
 const HOURS_RANGES: { min: number; max: number }[] = [
@@ -185,6 +193,8 @@ export interface AssessmentMetrics {
   /** Inputs echoed back for transparency. */
   clientValue: number
   visitsPerYear: number
+  /** Lowercase phrasing of the selected visit frequency ("once every week"). */
+  visitFrequencyPhrase: string
   /** Average transaction × visits per year. */
   lifetimeValue: number
   /** Daily unanswered-call range and its midpoint. */
@@ -197,9 +207,15 @@ export interface AssessmentMetrics {
   minRevenue: number
   maxRevenue: number
   midpointRevenue: number
+  /** Estimated sales lost per year (monthly midpoint × 12). */
+  annualRevenue: number
   /** Daily staff time (hours) that could be recovered. */
   minRecoveredHours: number
   maxRecoveredHours: number
+  /** Midpoint of the daily recoverable-hours range. */
+  midpointRecoveredHours: number
+  /** Staff hours handed back per month (midpoint daily hours × 30). */
+  recoveredHoursPerMonth: number
   /** Daily labor cost recovered (recovered hours × blended rate). */
   minLaborSavings: number
   maxLaborSavings: number
@@ -234,12 +250,15 @@ export function calculateMetrics(answers: Answers): AssessmentMetrics {
 
   const minRecoveredHours = HOURS_RANGES[hoursIdx].min
   const maxRecoveredHours = HOURS_RANGES[hoursIdx].max
+  const midpointRecoveredHours = (minRecoveredHours + maxRecoveredHours) / 2
+  const recoveredHoursPerMonth = round(midpointRecoveredHours * 30)
   const minLaborSavings = round(minRecoveredHours * LABOR_RATE)
   const maxLaborSavings = round(maxRecoveredHours * LABOR_RATE)
 
   return {
     clientValue,
     visitsPerYear,
+    visitFrequencyPhrase: VISIT_FREQUENCY_PHRASES[visitIdx],
     lifetimeValue,
     minCalls,
     maxCalls,
@@ -248,8 +267,11 @@ export function calculateMetrics(answers: Answers): AssessmentMetrics {
     minRevenue,
     maxRevenue,
     midpointRevenue,
+    annualRevenue: round(midpointRevenue * 12),
     minRecoveredHours,
     maxRecoveredHours,
+    midpointRecoveredHours,
+    recoveredHoursPerMonth,
     minLaborSavings,
     maxLaborSavings,
   }
