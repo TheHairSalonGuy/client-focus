@@ -8,173 +8,34 @@ import { CALENDLY_URL } from "@/lib/site-config"
 // Value-focused feature checklist row.
 type Benefit = { title: string; description: string }
 
-// A single restaurant-category carousel slide. The active slide id also selects
-// which industry copy block renders in the left content panel.
+// A single restaurant-category carousel slide. Copy is shared across all slides;
+// only the image (and its alt text) changes per category.
 type Slide = { id: string; label: string; src: string; alt: string; objectPosition: string }
 
-// Per-industry hero copy. Keyed by the same slide ids the carousel already uses,
-// so advancing the carousel swaps the headline, stat, body, and bullets together.
-type IndustryCopy = {
-  headlineWord: string
-  statSubhead: string
-  mathLinkText: string
-  bodyCopy: string
-  bullets: Benefit[]
-  ctaLabel: string
-}
+// Shared "Virtual Receptionist" copy shown on every slide.
+const HEADLINE_WORD = "Customer."
 
-const MATH_LINK_TEXT = "Here's the math on one missed call."
+const LEAD = "How much is one new order worth to your restaurant?"
 
-const INDUSTRY_COPY: Record<string, IndustryCopy> = {
-  "fine-dining": {
-    headlineWord: "Customer.",
-    statSubhead: "Your Phone Is Losing You $60,000 A Year.",
-    mathLinkText: MATH_LINK_TEXT,
-    bodyCopy:
-      "One missed call is one missed reservation. One missed reservation is a $500 average check — gone, straight to the restaurant down the street. Do that 10 times a month and you've lost $5,000. Do that for a year and it's $60,000 — enough to hire two more servers or just keep as pure profit. Ashley answers every call, every time, so that number goes to zero.",
-    bullets: [
-      {
-        title: "Never Lose Another $500 Table.",
-        description:
-          "Ashley picks up 10 calls at once. No busy signal, no hold music, no reason for a guest to hang up and dial your competitor.",
-      },
-      {
-        title: "Get 30 Hours Back Every Month.",
-        description: `That's how long your staff spends answering "are you open" and "is there parking." Ashley answers it in 2 seconds so your team sells instead of answering phones.`,
-      },
-      {
-        title: "She Never Calls Out. Never Quits. Never Forgets an Allergy.",
-        description: "Ashley works every shift, knows every ingredient, and never needs a raise.",
-      },
-      {
-        title: "8 Out Of 10 People Won't Leave a Voicemail.",
-        description:
-          "They hang up and book somewhere else. Ashley answers at 11pm on a Tuesday exactly like she does at 7pm on a Saturday.",
-      },
-    ],
-    ctaLabel: "Book a Demo",
+const BODY_PARAGRAPH =
+  "When hungry customers hit a busy line during peak hours, they hang up and call the restaurant down the street—cash walking straight into your competitor's register. Your Virtual Receptionist provides 24/7 coverage to take orders, answer menu questions, and book reservations automatically, paying for itself with a single saved rush hour. Take our Free Assessment below to see how much are missed calls costing your restaurant."
+
+const BENEFITS: Benefit[] = [
+  {
+    title: "Handle Multiple Customers at Once.",
+    description:
+      "Your front desk can only speak to one person at a time, leading to busy signals and dropped calls during peak rushes. Your Virtual Receptionist talks to multiple customers simultaneously, ensuring every order and reservation is secured instantly.",
   },
-
-  "casual-dining": {
-    headlineWord: "Table.",
-    statSubhead: "Your Phone Is Losing You $36,000 A Year.",
-    mathLinkText: MATH_LINK_TEXT,
-    bodyCopy:
-      "One missed call is one missed table. A party of four at a $75 average check is $300 walking out the door — to the place with the shorter wait. Do that 10 times a month and that's $3,000. Do it for a year and you've handed your competitor $36,000. Ashley answers every call on the first ring, so that number goes to zero.",
-    bullets: [
-      {
-        title: "Never Lose Another $300 Table.",
-        description:
-          "Ashley picks up 10 calls at once during the dinner rush. No busy signal, no hold music, no reason for a family to call somewhere else.",
-      },
-      {
-        title: "Get 30 Hours Back Every Month.",
-        description: `That's how long your hosts spend answering "how long is the wait" and "do you take reservations." Ashley answers in 2 seconds so your team works the floor instead of the phone.`,
-      },
-      {
-        title: "Every Takeout Order, Captured Correctly.",
-        description:
-          "Ashley takes the order, repeats it back, and sends it to the kitchen — no misheard items, no comped meals, no wasted food.",
-      },
-      {
-        title: "8 Out Of 10 People Won't Leave a Voicemail.",
-        description:
-          "They hang up and eat somewhere else. Ashley answers at 9pm on a Monday exactly like she does at 7pm on a Friday.",
-      },
-    ],
-    ctaLabel: "Book a Demo",
+  {
+    title: "Eliminate Costly FAQ Interruptions.",
+    description: `Answering repetitive questions like "Do I need a reservation?" or "Can I book a table of four?" wastes hours of staff time. Let your Virtual Receptionist handle these instantly so your team can stay focused on serving guests in the dining room.`,
   },
-
-  "quick-service": {
-    headlineWord: "Order.",
-    statSubhead: "Your Phone Is Losing You $28,000 A Year.",
-    mathLinkText: MATH_LINK_TEXT,
-    bodyCopy:
-      "One missed call is one missed order. A $35 family pickup order is gone the second the line rings busy — and they order from the shop down the block instead. Miss 15 a week and that's $2,100 a month. Over a year it's more than $28,000 in orders your kitchen never saw. Ashley answers every call instantly, so that number goes to zero.",
-    bullets: [
-      {
-        title: "Never Lose Another $35 Order.",
-        description:
-          "Ashley takes 10 orders at the same time during the lunch rush. No busy signal, no hold music, no customer hanging up hungry.",
-      },
-      {
-        title: "Get 30 Hours Back Every Month.",
-        description: `That's how long your crew spends answering "are you open" and "how long for pickup." Ashley handles it in 2 seconds so your line keeps moving.`,
-      },
-      {
-        title: "Get Paid Before The Kitchen Starts Cooking.",
-        description:
-          "Ashley texts a payment link and confirms the order, so there are no no-shows, no unpaid pickups, and no thrown-out food.",
-      },
-      {
-        title: "8 Out Of 10 People Won't Leave a Voicemail.",
-        description:
-          "They hang up and order elsewhere. Ashley answers at 11pm on a Tuesday exactly like she does at noon on a Saturday.",
-      },
-    ],
-    ctaLabel: "Book a Demo",
+  {
+    title: "24/7 Availability That Never Misses a Beat.",
+    description:
+      "8 out of 10 people won't leave a voicemail when they hit a dead end after hours, taking their business elsewhere. Your Virtual Receptionist is always on—answering late-night inquiries and capturing revenue around the clock, exactly the same at 10 PM on a Tuesday as 7 PM on a Saturday.",
   },
-
-  "bar-grill": {
-    headlineWord: "Fan.",
-    statSubhead: "Your Phone Is Losing You $48,000 A Year.",
-    mathLinkText: MATH_LINK_TEXT,
-    bodyCopy:
-      "One missed call is one missed party. A group of eight coming in for the game at a $50 head is $400 — and on game day they will not call twice. Miss 10 of those a month and that's $4,000. Over a season and a year it adds up to $48,000 in tabs you never rang. Ashley answers every call, even mid-rush, so that number goes to zero.",
-    bullets: [
-      {
-        title: "Never Lose Another $400 Party.",
-        description:
-          "Ashley picks up 10 calls at once on game day. No busy signal, no hold music, no group booking the sports bar across town.",
-      },
-      {
-        title: "Get 30 Hours Back Every Month.",
-        description: `That's how long your staff spends answering "are you showing the fight" and "can we get a table for ten." Ashley answers in 2 seconds so your team keeps pouring.`,
-      },
-      {
-        title: "Big-Party And Game-Day Bookings, Locked In.",
-        description:
-          "Ashley captures the group size, the game they are coming for, and a callback number — then hands your team a clean, ready-to-seat list.",
-      },
-      {
-        title: "8 Out Of 10 People Won't Leave a Voicemail.",
-        description:
-          "They hang up and watch the game somewhere else. Ashley answers at midnight exactly like she does at kickoff.",
-      },
-    ],
-    ctaLabel: "Book a Demo",
-  },
-
-  "thai-restaurant": {
-    headlineWord: "Guest.",
-    statSubhead: "Your Phone Is Losing You $42,000 A Year.",
-    mathLinkText: MATH_LINK_TEXT,
-    bodyCopy:
-      "One missed call is one missed guest. A takeout order or a table for four at a $85 average check is $340 — and a hungry caller will simply dial the next restaurant on the list. Do that 10 times a month and you've lost $3,500. Do it for a year and it's $42,000. Ashley answers every call, in a clear and friendly voice, so that number goes to zero.",
-    bullets: [
-      {
-        title: "Never Lose Another $340 Guest.",
-        description:
-          "Ashley picks up 10 calls at once through the dinner rush. No busy signal, no hold music, no reason for a guest to order elsewhere.",
-      },
-      {
-        title: "Get 30 Hours Back Every Month.",
-        description: `That's how long your staff spends answering "are you open" and "how spicy is it." Ashley answers in 2 seconds so your team serves the dining room.`,
-      },
-      {
-        title: "She Knows Every Dish, Every Spice Level, Every Allergy.",
-        description:
-          "Ashley explains the menu accurately every time and flags peanut, shellfish, and gluten questions without hesitating.",
-      },
-      {
-        title: "8 Out Of 10 People Won't Leave a Voicemail.",
-        description:
-          "They hang up and order from the next place. Ashley answers at 10pm on a Tuesday exactly like she does at 7pm on a Saturday.",
-      },
-    ],
-    ctaLabel: "Book a Demo",
-  },
-}
+]
 
 // Ordered carousel slides. Index 0 (Fine Dining) is shown on page load.
 const SLIDES: Slide[] = [
@@ -226,9 +87,6 @@ export function Hero() {
   const prevLabel = SLIDES[(index - 1 + SLIDES.length) % SLIDES.length].label
   const nextLabel = SLIDES[(index + 1) % SLIDES.length].label
 
-  // Hero copy follows the active carousel slide, falling back to fine dining.
-  const copy = INDUSTRY_COPY[SLIDES[index].id] ?? INDUSTRY_COPY["fine-dining"]
-
   return (
     <section id="top" className="relative w-full">
       {/* Split hero: ~45% light content panel (left) + ~55% image panel (right).
@@ -247,27 +105,24 @@ export function Hero() {
                 <span className="text-navy-deep">Another </span>
                 <span className="word-swap-window text-teal">
                   <span className="word-swap-track">
-                    <span>{copy.headlineWord}</span>
+                    <span>{HEADLINE_WORD}</span>
                     <span>Order.</span>
                   </span>
                 </span>
               </span>
             </h2>
 
-            {/* Supporting headline + math sub-lead */}
-            <h3 className="mt-5 text-pretty text-2xl font-bold leading-snug text-foreground sm:text-3xl">
-              {copy.statSubhead}
-            </h3>
-            <p className="mt-2 text-pretty text-xl font-semibold text-teal sm:text-2xl">{copy.mathLinkText}</p>
+            {/* Supporting question heading */}
+            <h3 className="mt-5 text-pretty text-2xl font-bold leading-snug text-foreground sm:text-3xl">{LEAD}</h3>
 
             {/* Supporting copy */}
             <div className="mt-4 space-y-3">
-              <p className="text-pretty text-2xl font-medium leading-relaxed text-foreground">{copy.bodyCopy}</p>
+              <p className="text-pretty text-2xl font-medium leading-relaxed text-foreground">{BODY_PARAGRAPH}</p>
             </div>
 
             {/* Benefit rows — each keeps the subtle proximity hover (lift + scale + brighten). */}
             <ul className="mt-5 grid gap-2.5">
-              {copy.bullets.map((benefit) => (
+              {BENEFITS.map((benefit) => (
                 <li
                   key={benefit.title}
                   className="group flex origin-left transform-gpu items-start gap-3 py-0.5 text-xl leading-relaxed text-foreground transition-all duration-300 ease-out hover:-translate-y-1 hover:scale-[1.03] hover:brightness-110 sm:text-2xl"
@@ -293,7 +148,7 @@ export function Hero() {
                 className="group relative isolate inline-flex w-full items-center justify-center overflow-hidden rounded-lg bg-[#124E8C] px-8 py-5 text-2xl font-semibold tracking-wide text-white transition-all duration-300 hover:bg-[#0e3f72] hover:shadow-[0_0_24px_-4px_rgba(18,78,140,0.7)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#124E8C]/50"
               >
                 <span aria-hidden="true" className="cta-runner" />
-                <span className="relative z-[1]">{copy.ctaLabel}</span>
+                <span className="relative z-[1]">Book a Demo</span>
               </a>
             </div>
           </div>
