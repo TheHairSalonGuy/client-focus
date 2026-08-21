@@ -13,32 +13,32 @@ type Benefit = { title: string; description: string }
 type Slide = { id: string; label: string; src: string; alt: string; objectPosition: string }
 
 // Fixed "Virtual Waitress" body copy shown on every slide.
-const BODY_PARAGRAPH =
-  "When hungry customers hit a busy line during peak hours, they hang up and call the restaurant down the street—cash walking straight into your competitor's register. Your Virtual Waitress provides 24/7 coverage to take orders, answer menu questions, and book reservations automatically, paying for itself with a single saved rush hour."
+const LEAD = "Your Phone Is Losing You $60,000 A Year."
 
-const LEAD = "How much is one new order worth to your restaurant?"
+const SUBLEAD = "Here's the math on one missed call."
+
+const BODY_PARAGRAPH =
+  "One missed call is one missed reservation. One missed reservation is a $500 average check — gone, straight to the restaurant down the street. Do that 10 times a month and you've lost $5,000. Do that for a year and it's $60,000 — enough to hire two more servers or just keep as pure profit. Ashley answers every call, every time, so that number goes to zero."
 
 // Restaurant-specific benefit checklist (4 items).
 const BENEFITS: Benefit[] = [
   {
-    title: "Stop Losing $3,000/Month to Busy Signals",
+    title: "Never Lose Another $500 Table.",
     description:
-      "Your Virtual Waitress answers 50 calls at once, so every $40 order you're missing lands in your register instead of your competitor's.",
+      "Ashley picks up 10 calls at once. No busy signal, no hold music, no reason for a guest to hang up and dial your competitor.",
   },
   {
-    title: "Buy Back 30 Hours of Paid Labor Every Month",
-    description:
-      "It answers every hours, parking, and menu question instantly, freeing your team to serve the paying guests in your dining room.",
+    title: "Get 30 Hours Back Every Month.",
+    description: `That's how long your staff spends answering "are you open" and "is there parking." Ashley answers it in 2 seconds so your team sells instead of answering phones.`,
   },
   {
-    title: "Replace a $1,600/Mo Employee for a Fraction of the Cost",
-    description:
-      "It works 24/7, never calls out, and never asks for a raise—for a tiny fraction of what a part-time phone worker costs.",
+    title: "She Never Calls Out. Never Quits. Never Forgets an Allergy.",
+    description: "Ashley works every shift, knows every ingredient, and never needs a raise.",
   },
   {
-    title: "Eliminate Unpaid Takeout and Stolen Food",
+    title: "8 Out Of 10 People Won't Leave a Voicemail.",
     description:
-      "It texts a payment link and gets you paid before the kitchen starts cooking, so there are zero unpaid orders and zero wasted food.",
+      "They hang up and book somewhere else. Ashley answers at 11pm on a Tuesday exactly like she does at 7pm on a Saturday.",
   },
 ]
 
@@ -110,17 +110,18 @@ export function Hero() {
                 <span className="text-navy-deep">Another </span>
                 <span className="word-swap-window text-teal">
                   <span className="word-swap-track">
-                    <span>Client.</span>
+                    <span>Customer.</span>
                     <span>Order.</span>
                   </span>
                 </span>
               </span>
             </h2>
 
-            {/* Supporting question heading */}
+            {/* Supporting headline + math sub-lead */}
             <h3 className="mt-5 text-pretty text-2xl font-bold leading-snug text-foreground sm:text-3xl">
               {LEAD}
             </h3>
+            <p className="mt-2 text-pretty text-xl font-semibold text-teal sm:text-2xl">{SUBLEAD}</p>
 
             {/* Supporting copy */}
             <div className="mt-4 space-y-3">
