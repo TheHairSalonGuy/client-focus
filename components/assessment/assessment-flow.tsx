@@ -190,19 +190,19 @@ function IntroStep({ onStart }: { onStart: () => void }) {
       </h1>
       <p className="mx-auto mt-5 text-pretty text-lg leading-relaxed text-muted-foreground">
         Answer 5 quick questions to see how much sales of your restaurant goes to your competitors
-        <br className="hidden sm:block" /> and how our Virtual Receptionist could help bring that money back to your
+        <br className="hidden sm:block" /> and how our Virtual Receptionist can help bring that money back to your
         business.
       </p>
       <div className="mt-9">
         <button
           type="button"
           onClick={onStart}
-          className="group relative isolate inline-flex items-center justify-center gap-2 overflow-hidden rounded-full bg-[var(--yellow-cta)] px-[5.5rem] py-4 text-lg font-semibold text-[var(--yellow-cta-ink)] transition-all duration-300 hover:brightness-105 hover:shadow-[0_0_28px_-4px_color-mix(in_oklch,var(--yellow-cta)_80%,transparent)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[color-mix(in_oklch,var(--yellow-cta)_60%,transparent)]"
+          className="group relative isolate inline-flex items-center justify-center gap-2 overflow-hidden rounded-full bg-[var(--yellow-cta)] px-[5.5rem] py-4 text-xl font-semibold text-[var(--yellow-cta-ink)] transition-all duration-300 hover:brightness-105 hover:shadow-[0_0_28px_-4px_color-mix(in_oklch,var(--yellow-cta)_80%,transparent)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[color-mix(in_oklch,var(--yellow-cta)_60%,transparent)]"
         >
           <span aria-hidden="true" className="cta-runner" />
           <span className="relative z-[1] inline-flex items-center gap-2">
             Start Assessment
-            <ArrowRight className="h-5 w-5" />
+            <ArrowRight className="h-6 w-6" />
           </span>
         </button>
       </div>
