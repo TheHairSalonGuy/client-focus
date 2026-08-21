@@ -5,32 +5,21 @@ import Image from "next/image"
 import { Check, ChevronLeft, ChevronRight } from "lucide-react"
 import { CALENDLY_URL } from "@/lib/site-config"
 
-type Scene = "restaurant" | "law" | "dental"
-
 // Value-focused feature checklist row.
 type Benefit = { title: string; description: string }
 
-/**
- * Body copy is generated per-scene. The restaurant slide uses dedicated
- * "Virtual Waitress" sales copy; law/dental fall back to the original
- * professional-service copy with terminology that flips per industry
- * (clients/case ⇄ patients/procedure).
- */
-function buildBodyParagraphs(scene: Scene): string[] {
-  if (scene === "restaurant") {
-    return [
-      "When hungry customers hit a busy line during peak hours, they hang up and call the restaurant down the street—cash walking straight into your competitor's register. Your Virtual Waitress provides 24/7 coverage to take orders, answer menu questions, and book reservations automatically, paying for itself with a single saved rush hour.",
-    ]
-  }
-  const clientsTerm = scene === "dental" ? "patients" : "clients"
-  const outcomeTerm = scene === "dental" ? "procedure" : "case"
-  return [
-    `When prospective ${clientsTerm} hit voicemail after hours, most won't leave a message—they hang up and call a competitor, and that missed call is lost revenue. My Virtual Receptionist provides 24/7, white-glove coverage to capture inquiries, gather intake details, and schedule appointments—paying for itself with a single saved ${outcomeTerm}.`,
-  ]
-}
+// A single restaurant-category carousel slide. Copy is shared across all slides;
+// only the image (and its alt text) changes per category.
+type Slide = { id: string; label: string; src: string; alt: string; objectPosition: string }
 
-// Restaurant-specific benefit checklist (4 items) shown on the Thai restaurant slide.
-const RESTAURANT_BENEFITS: Benefit[] = [
+// Fixed "Virtual Waitress" body copy shown on every slide.
+const BODY_PARAGRAPH =
+  "When hungry customers hit a busy line during peak hours, they hang up and call the restaurant down the street—cash walking straight into your competitor's register. Your Virtual Waitress provides 24/7 coverage to take orders, answer menu questions, and book reservations automatically, paying for itself with a single saved rush hour."
+
+const LEAD = "How much is one new order worth to your restaurant?"
+
+// Restaurant-specific benefit checklist (4 items).
+const BENEFITS: Benefit[] = [
   {
     title: "Stop Losing $3,000/Month to Busy Signals",
     description:
@@ -53,71 +42,44 @@ const RESTAURANT_BENEFITS: Benefit[] = [
   },
 ]
 
-// Professional-service benefit checklist (5 items) shown on the law & dental slides.
-const PROFESSIONAL_BENEFITS: Benefit[] = [
+// Ordered carousel slides. Index 0 (Fine Dining) is shown on page load.
+const SLIDES: Slide[] = [
   {
-    title: "Exceptional Customer Support",
-    description:
-      "Eliminates 80% of repetitive staff calls by answering every FAQ with perfect precision and patience, and never takes a sick day.",
+    id: "fine-dining",
+    label: "Fine Dining",
+    src: "/hero-fine-dining.png",
+    alt: "A young blonde maître d' in a white blouse and black blazer smiling while taking a reservation call at the host stand of an upscale steakhouse with a wine wall and dark wood accents",
+    objectPosition: "object-[50%_28%]",
   },
   {
-    title: "Instant 24/7 Response",
-    description:
-      "Captures high-value leads instantly during nights and weekends, before they hang up and call your competitor.",
+    id: "casual-dining",
+    label: "Casual Dining",
+    src: "/hero-casual-dining.png",
+    alt: "A friendly young female host in a black polo smiling while taking a takeout order on the phone at the host stand of a casual full-service dining room with a pickup counter behind her",
+    objectPosition: "object-[50%_28%]",
   },
   {
-    title: "Custom Intake Summaries",
-    description:
-      "Collects essential prospect details to your exact rules and drops clean, actionable leads straight into your inbox.",
+    id: "quick-service",
+    label: "Quick Service",
+    src: "/hero-quick-service.png",
+    alt: "An energetic young female employee in a branded polo and visor wearing a headset and taking an order at the counter of a bright fast-casual sandwich shop with a menu board and prep station behind her",
+    objectPosition: "object-[50%_28%]",
   },
   {
-    title: "Direct Calendar Booking",
-    description:
-      "Turns raw caller intent into paid calendar appointments on autopilot, without your team lifting a finger.",
-  },
-  {
-    title: "Automated Reminders",
-    description:
-      "Crushes costly no-shows instantly with automated SMS/call confirmations, ensuring your schedule stays full and profitable.",
+    id: "bar-grill",
+    label: "Bar & Grill",
+    src: "/hero-bar-grill.png",
+    alt: "A casual young female bartender in a black branded tee smiling while taking a call at the host stand of a sports bar with TVs, exposed brick, and string lights in the background",
+    objectPosition: "object-[50%_28%]",
   },
 ]
 
-// Ordered list of carousel slides. Index 0 is shown on page load.
-const SCENES: Scene[] = ["restaurant", "law", "dental"]
-
-const COPY: Record<Scene, { lead: string; alt: string; src: string; objectPosition: string }> = {
-  restaurant: {
-    lead: "How much is one new order worth to your restaurant?",
-    src: "/bg-restaurant-hero.png",
-    alt: "A young, friendly Thai waitress in her early 20s smiling while speaking on a landline telephone, taking a takeout order in a modern upscale restaurant dining area with warm wood accents and an indoor running-water wall feature behind her",
-    objectPosition: "object-[50%_28%]",
-  },
-  law: {
-    lead: "How much is one new client worth to your firm?",
-    src: "/bg-lawfirm-hero.png",
-    alt: "A blonde professional virtual receptionist wearing a headset, seated behind a law firm front desk with a computer monitor, taking a call, with law books and windows behind her",
-    objectPosition: "object-[50%_28%]",
-  },
-  dental: {
-    lead: "How much is one new patient worth to your practice?",
-    src: "/bg-dental-hero.png",
-    alt: "A professional virtual receptionist with brown hair wearing a headset, seated behind a marble reception counter taking a call, with a dentist treating a patient and a waiting patient in the softly blurred background",
-    objectPosition: "object-[50%_28%]",
-  },
-}
-
 export function Hero() {
-  // Index-based carousel: 0 = restaurant (default), 1 = law, 2 = dental.
+  // Index-based carousel: 0 = Fine Dining (default) → Casual → Quick Service → Bar & Grill.
   const [index, setIndex] = useState(0)
-  const scene = SCENES[index]
-  const copy = COPY[scene]
-  // Body copy + benefit list flip with the active slide: restaurant shows the
-  // "Virtual Waitress" copy (4 items), law/dental show the professional copy (5 items).
-  const bodyParagraphs = buildBodyParagraphs(scene)
-  const benefits = scene === "restaurant" ? RESTAURANT_BENEFITS : PROFESSIONAL_BENEFITS
 
-  const goPrev = () => setIndex((i) => (i - 1 + SCENES.length) % SCENES.length)
-  const goNext = () => setIndex((i) => (i + 1) % SCENES.length)
+  const goPrev = () => setIndex((i) => (i - 1 + SLIDES.length) % SLIDES.length)
+  const goNext = () => setIndex((i) => (i + 1) % SLIDES.length)
 
   return (
     <section id="top" className="relative w-full">
@@ -125,13 +87,9 @@ export function Hero() {
           On mobile/tablet these stack (content first, image below) via grid-cols-1. */}
       <div className="grid w-full grid-cols-1 lg:min-h-[85vh] lg:grid-cols-[45%_55%]">
         {/* ---------------- LEFT: content panel ---------------- */}
-        {/* Clean light background, no scrim/haze, so every line is crisp and high-contrast.
-            A wider column + trimmed padding lets paragraphs run more words per line
-            (less vertical wrap); content is vertically centered on desktop. */}
         <div className="relative z-10 w-full flex flex-col justify-center bg-background px-6 pb-12 pt-20 sm:px-10 lg:justify-start lg:pl-12 lg:pr-12 lg:pb-8 lg:pt-[72px] xl:pl-16 xl:pr-16">
           <div className="mx-auto w-full max-w-4xl lg:ml-auto lg:mr-0">
-            {/* Main sales headline — the branding lockup now lives in the header, so the
-                hero content starts here. "Never Miss Another" navy, final word teal, elegant
+            {/* Main sales headline. "Never Miss Another" navy, final word teal, elegant
                 serif, forced onto exactly two lines. The final word is an interactive vertical
                 text-swap: on hover "Client" slides up out of view while "Order" slides in from
                 below. */}
@@ -139,9 +97,6 @@ export function Hero() {
               <span className="block text-navy-deep">Never Miss</span>
               <span className="block">
                 <span className="text-navy-deep">Another </span>
-                {/* Vertical text-swap: a fixed-height, overflow-hidden window holding two
-                    stacked words. On group hover both translate up one line height, sliding
-                    "Client" out the top and "Order" in from the bottom. */}
                 <span className="word-swap-window text-teal">
                   <span className="word-swap-track">
                     <span>Client.</span>
@@ -152,30 +107,18 @@ export function Hero() {
             </h2>
 
             {/* Supporting question heading */}
-            <h3
-              key={`${scene}-lead`}
-              className="mt-5 text-pretty text-2xl font-bold leading-snug text-foreground sm:text-3xl"
-            >
-              {copy.lead}
+            <h3 className="mt-5 text-pretty text-2xl font-bold leading-snug text-foreground sm:text-3xl">
+              {LEAD}
             </h3>
 
-            {/* Supporting copy — two structured paragraphs with scene-aware terminology.
-                Wider max-width lets each line hold more words, cutting wrapped rows. */}
-            <div key={`${scene}-body`} className="mt-4 space-y-3">
-              {bodyParagraphs.map((paragraph) => (
-                <p
-                  key={paragraph.slice(0, 24)}
-                  className="text-pretty text-2xl font-medium leading-relaxed text-foreground"
-                >
-                  {paragraph}
-                </p>
-              ))}
+            {/* Supporting copy */}
+            <div className="mt-4 space-y-3">
+              <p className="text-pretty text-2xl font-medium leading-relaxed text-foreground">{BODY_PARAGRAPH}</p>
             </div>
 
-            {/* Five benefit rows — order fixed; each keeps the subtle proximity hover
-                (lift + scale from the left + brighten). */}
-            <ul key={`${scene}-benefits`} className="mt-5 grid gap-2.5">
-              {benefits.map((benefit) => (
+            {/* Benefit rows — each keeps the subtle proximity hover (lift + scale + brighten). */}
+            <ul className="mt-5 grid gap-2.5">
+              {BENEFITS.map((benefit) => (
                 <li
                   key={benefit.title}
                   className="group flex origin-left transform-gpu items-start gap-3 py-0.5 text-xl leading-relaxed text-foreground transition-all duration-300 ease-out hover:-translate-y-1 hover:scale-[1.03] hover:brightness-110 sm:text-2xl"
@@ -191,8 +134,7 @@ export function Hero() {
               ))}
             </ul>
 
-            {/* Book a Demo button — matches the navigation CTA (teal pill + running highlight).
-                Sits directly beneath the bullet list, attached to the content stack. */}
+            {/* Book a Demo button — matches the navigation CTA (teal pill + running highlight). */}
             <div className="mt-4">
               <a
                 href={CALENDLY_URL}
@@ -208,27 +150,33 @@ export function Hero() {
           </div>
         </div>
 
-        {/* ---------------- RIGHT: image panel (3-slide carousel) ---------------- */}
-        {/* Full-bleed photo carousel. Each slide cross-fades; the right arrow advances
-            restaurant → law → dental (wrapping), the left arrow steps back. */}
+        {/* ---------------- RIGHT: image panel (4-slide carousel) ---------------- */}
+        {/* Full-bleed photo carousel across the four restaurant categories. Each slide
+            cross-fades; the right arrow advances Fine Dining → Casual → Quick Service →
+            Bar & Grill (wrapping), the left arrow steps back. */}
         <div className="relative w-full aspect-[4/3] lg:aspect-auto lg:h-full lg:min-h-[500px]">
-          {SCENES.map((s, i) => (
+          {SLIDES.map((slide, i) => (
             <div
-              key={s}
+              key={slide.id}
               className="absolute inset-0 transition-opacity duration-700 ease-out"
               style={{ opacity: i === index ? 1 : 0 }}
               aria-hidden={i !== index}
             >
               <Image
-                src={COPY[s].src || "/placeholder.svg"}
-                alt={COPY[s].alt}
+                src={slide.src || "/placeholder.svg"}
+                alt={slide.alt}
                 fill
                 priority={i === 0}
                 sizes="(max-width: 1024px) 100vw, 55vw"
-                className={`object-cover ${COPY[s].objectPosition}`}
+                className={`object-cover ${slide.objectPosition}`}
               />
             </div>
           ))}
+
+          {/* Category label chip, top-left over the image */}
+          <div className="absolute left-4 top-4 z-30 rounded-full bg-navy-deep/85 px-4 py-1.5 text-sm font-semibold text-primary-foreground backdrop-blur-md md:left-6 md:top-6">
+            {SLIDES[index].label}
+          </div>
 
           {/* Carousel navigation, vertically centered over the image */}
           <button
@@ -250,12 +198,12 @@ export function Hero() {
 
           {/* Slide indicator dots */}
           <div className="absolute bottom-6 left-1/2 z-30 flex -translate-x-1/2 items-center gap-2.5">
-            {SCENES.map((s, i) => (
+            {SLIDES.map((slide, i) => (
               <button
-                key={s}
+                key={slide.id}
                 type="button"
                 onClick={() => setIndex(i)}
-                aria-label={`Go to slide ${i + 1}`}
+                aria-label={`Go to slide ${i + 1}: ${slide.label}`}
                 aria-current={i === index}
                 className={`h-2.5 rounded-full transition-all duration-300 ${
                   i === index ? "w-8 bg-teal" : "w-2.5 bg-card/80 hover:bg-card"
