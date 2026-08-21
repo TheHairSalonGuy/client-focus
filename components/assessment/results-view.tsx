@@ -128,7 +128,7 @@ export function ResultsView({
               {money(revenue)}
             </p>
             <p className="mt-1 text-[9px] font-semibold uppercase leading-tight tracking-wide text-muted-foreground sm:text-[11px]">
-              Estimated Monthly Sales Lost
+              Monthly Revenue Belonging to Your Business
             </p>
           </div>
         </div>
