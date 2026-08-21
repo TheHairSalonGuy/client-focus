@@ -183,11 +183,11 @@ function IntroStep({ onStart }: { onStart: () => void }) {
         Free Assessment
       </span>
       <h1 className="mt-6 text-balance font-serif text-4xl font-normal leading-[1.08] tracking-tight text-navy-deep sm:text-5xl">
-        How Much Are Missed Client Calls Costing Your Office?
+        How much are missed customer orders costing your restaurant?
       </h1>
       <p className="mx-auto mt-5 max-w-xl text-pretty text-lg leading-relaxed text-muted-foreground">
-        Answer 5 quick questions to see how much revenue your office may be losing from missed calls—and how a Virtual
-        Receptionist could help you capture more opportunities.
+        Answer 5 quick questions to see how much sales of your restaurant goes to your competitors — and how our Virtual
+        Receptionist could help bring that money back to your business.
       </p>
       <div className="mt-9">
         <button
