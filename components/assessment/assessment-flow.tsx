@@ -144,7 +144,8 @@ export function AssessmentFlow() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-3xl px-6">
+    // The intro gets a wider column so its headline and subtext each hold two rows.
+    <div className={`mx-auto w-full px-6 ${step === "intro" ? "max-w-5xl" : "max-w-3xl"}`}>
       {step === "intro" && <IntroStep onStart={startAssessment} />}
 
       {step === "contact" && (
@@ -177,23 +178,26 @@ export function AssessmentFlow() {
 
 function IntroStep({ onStart }: { onStart: () => void }) {
   return (
-    <div className="mx-auto max-w-2xl py-4 text-center">
+    <div className="mx-auto py-4 text-center">
       <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-1.5 text-sm font-semibold text-foreground shadow-sm">
         <Sparkles className="h-4 w-4 text-teal" />
         Free Assessment
       </span>
-      <h1 className="mt-6 text-balance font-serif text-4xl font-normal leading-[1.08] tracking-tight text-navy-deep sm:text-5xl">
-        How much are missed customer orders costing your restaurant?
+      {/* Headline and subtext are each locked to two rows on desktop via explicit breaks. */}
+      <h1 className="mt-6 font-serif text-4xl font-normal leading-[1.12] tracking-tight text-navy-deep sm:text-5xl">
+        How much are missed customer orders
+        <br className="hidden sm:block" /> costing your restaurant?
       </h1>
-      <p className="mx-auto mt-5 max-w-xl text-pretty text-lg leading-relaxed text-muted-foreground">
-        Answer 5 quick questions to see how much sales of your restaurant goes to your competitors — and how our Virtual
-        Receptionist could help bring that money back to your business.
+      <p className="mx-auto mt-5 text-pretty text-lg leading-relaxed text-muted-foreground">
+        Answer 5 quick questions to see how much sales of your restaurant goes to your competitors
+        <br className="hidden sm:block" /> and how our Virtual Receptionist could help bring that money back to your
+        business.
       </p>
       <div className="mt-9">
         <button
           type="button"
           onClick={onStart}
-          className="group relative isolate inline-flex items-center justify-center gap-2 overflow-hidden rounded-full bg-teal px-10 py-4 text-lg font-semibold text-primary-foreground transition-all duration-300 hover:bg-teal-bright hover:shadow-[0_0_28px_-4px_color-mix(in_oklch,var(--teal-bright)_80%,transparent)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-teal/60"
+          className="group relative isolate inline-flex items-center justify-center gap-2 overflow-hidden rounded-full bg-gold px-[5.5rem] py-4 text-lg font-semibold text-foreground transition-all duration-300 hover:brightness-105 hover:shadow-[0_0_28px_-4px_color-mix(in_oklch,var(--gold)_80%,transparent)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-gold/60"
         >
           <span aria-hidden="true" className="cta-runner" />
           <span className="relative z-[1] inline-flex items-center gap-2">
