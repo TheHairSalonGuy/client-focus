@@ -165,7 +165,7 @@ export function ResultsView({
           </p>
 
           <p>
-            Click &quot;Book a Demo&quot; below and speak with our Customer Success Team Member.
+            To get started, please click &quot;Book a Demo&quot; below and speak with our Customer Success Team Member.
           </p>
         </div>
 
@@ -189,13 +189,22 @@ export function ResultsView({
           </a>
         </div>
 
-        {/* Calculation */}
-        <p className="mt-6 text-sm leading-relaxed text-muted-foreground">
-          Calculation: {metrics.midpointCalls} missed calls per day × 30 days ={" "}
-          {metrics.missedCallsPerMonth.toLocaleString("en-US")} total missed calls per month.{" "}
-          {metrics.midpointCalls} missed calls per day × {money(metrics.clientValue)} average transaction × 30 days ={" "}
-          {money(metrics.midpointRevenue)} estimated monthly sales lost.
-        </p>
+        {/* Calculation breakdown — two dynamic formulas, both driven by the
+            visitor's own answers so the math is fully auditable. */}
+        <div className="mt-6 space-y-2 text-sm leading-relaxed text-muted-foreground">
+          <p>
+            Calculation based on your answers: {metrics.midpointCalls} missed calls per day &times;{" "}
+            {money(metrics.clientValue)} average transaction &times; 30 days ={" "}
+            <strong className="font-semibold text-foreground">{money(metrics.midpointRevenue)}</strong> total estimated
+            monthly sales lost.
+          </p>
+          <p>
+            Customer Value per Year: {metrics.visitsPerMonth} orders per month &times; {money(metrics.clientValue)}{" "}
+            average transaction &times; 12 months ={" "}
+            <strong className="font-semibold text-foreground">{money(metrics.lifetimeValue)}</strong> annual customer
+            value.
+          </p>
+        </div>
 
         {/* Disclaimer — directly below the calculation line */}
         <p className="mt-3 text-xs leading-relaxed text-muted-foreground">

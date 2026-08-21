@@ -193,6 +193,12 @@ export interface AssessmentMetrics {
   /** Inputs echoed back for transparency. */
   clientValue: number
   visitsPerYear: number
+  /**
+   * Visits per month (visitsPerYear / 12), used by the calculation breakdown
+   * which is expressed as "order frequency per month × transaction × 12".
+   * Kept fractional (e.g. 4.33 for weekly) so × 12 still equals visitsPerYear.
+   */
+  visitsPerMonth: number
   /** Lowercase phrasing of the selected visit frequency ("once every week"). */
   visitFrequencyPhrase: string
   /** Average transaction × visits per year. */
@@ -224,10 +230,11 @@ export interface AssessmentMetrics {
 /**
  * Derive the business metrics from the answers.
  *
- * Models (must stay in sync with the calculation line rendered in
+ * Models (must stay in sync with the calculation breakdown rendered in
  * results-view.tsx):
- *   missed calls / month = missed calls per day × 30
- *   sales lost / month   = missed calls per day × average transaction × 30
+ *   missed calls / month  = missed calls per day × 30
+ *   sales lost / month    = missed calls per day × average transaction × 30
+ *   annual customer value = orders per month × average transaction × 12
  */
 export function calculateMetrics(answers: Answers): AssessmentMetrics {
   const callIdx = choiceIndex(answers, "missedCalls", CALL_RANGES.length, DEFAULTS.missedCalls)
@@ -258,6 +265,7 @@ export function calculateMetrics(answers: Answers): AssessmentMetrics {
   return {
     clientValue,
     visitsPerYear,
+    visitsPerMonth: Math.round((visitsPerYear / 12) * 100) / 100,
     visitFrequencyPhrase: VISIT_FREQUENCY_PHRASES[visitIdx],
     lifetimeValue,
     minCalls,
