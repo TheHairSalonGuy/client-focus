@@ -9,6 +9,7 @@ import {
   type Answers,
   type ContactInfo,
 } from "@/lib/assessment"
+import { formatPhone } from "@/lib/utils"
 import { ResultsView } from "@/components/assessment/results-view"
 
 type Step = "intro" | "contact" | number | "results"
@@ -309,7 +310,7 @@ function ContactStep({
           />
         </Field>
 
-        <Field label="Role in Office" error={errors.role}>
+        <Field label="Role with the Business" error={errors.role}>
           <select
             className={`${inputClass} appearance-none`}
             value={contact.role}
@@ -331,9 +332,11 @@ function ContactStep({
             type="tel"
             className={inputClass}
             value={contact.phone}
-            onChange={(e) => onChange({ phone: e.target.value })}
+            onChange={(e) => onChange({ phone: formatPhone(e.target.value) })}
             placeholder="(555) 123-4567"
             autoComplete="tel"
+            inputMode="tel"
+            maxLength={14}
           />
         </Field>
 

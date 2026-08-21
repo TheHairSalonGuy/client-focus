@@ -49,10 +49,9 @@ export type Answers = Record<string, number | undefined>
 /* --------------------------------- Contact ---------------------------------- */
 
 export const ROLE_OPTIONS = [
-  "Owner / Doctor / Partner",
-  "Office Manager",
-  "Front Desk / Reception",
-  "Practice Administrator",
+  "Owner/Operator",
+  "Chief Operating Officer (COO)",
+  "Manager",
   "Other",
 ] as const
 

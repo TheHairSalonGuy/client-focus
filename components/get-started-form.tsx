@@ -4,6 +4,7 @@ import { useState } from "react"
 import Link from "next/link"
 import { ArrowRight, Check, Loader2, PhoneCall } from "lucide-react"
 import { CALENDLY_URL } from "@/lib/site-config"
+import { formatPhone } from "@/lib/utils"
 
 const inputClass =
   "w-full rounded-lg border border-input bg-card px-4 py-3 text-base text-foreground shadow-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-teal focus:ring-2 focus:ring-teal/40"
@@ -141,9 +142,11 @@ export function GetStartedForm() {
             type="tel"
             className={inputClass}
             value={form.phone}
-            onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))}
+            onChange={(e) => setForm((f) => ({ ...f, phone: formatPhone(e.target.value) }))}
             placeholder="(555) 123-4567"
             autoComplete="tel"
+            inputMode="tel"
+            maxLength={14}
           />
         </label>
 
