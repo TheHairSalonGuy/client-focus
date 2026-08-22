@@ -90,10 +90,12 @@ function renderAssessmentEmailHtml(data: AssessmentPayload): string {
   const answerRows = answersReadable.map(({ question, answer }) => row(question, answer)).join("")
 
   const metricRows = [
-    ["Estimated Monthly Revenue Opportunity", formatCurrency(m.midpointRevenue)],
-    ["Revenue Opportunity Range", `${formatCurrency(m.minRevenue)} – ${formatCurrency(m.maxRevenue)}`],
-    ["Average Client Value", formatCurrency(m.clientValue)],
-    ["Conversion Rate", `${m.conversionPercent}%`],
+    ["Estimated Monthly Sales Lost", formatCurrency(m.midpointRevenue)],
+    ["Monthly Sales Lost Range", `${formatCurrency(m.minRevenue)} – ${formatCurrency(m.maxRevenue)}`],
+    ["Average Transaction Value", formatCurrency(m.clientValue)],
+    ["Customer Visits / Year", `${m.visitsPerYear}`],
+    ["Lifetime Customer Value", formatCurrency(m.lifetimeValue)],
+    ["Total Missed Calls / Month", `${m.missedCallsPerMonth}`],
     ["Unanswered Calls / Day (range)", `${m.minCalls} – ${m.maxCalls}`],
     ["Staff Time Recovered / Day", `${m.minRecoveredHours} – ${m.maxRecoveredHours} hrs`],
     ["Labor Cost Recovered / Day", `${formatCurrency(m.minLaborSavings)} – ${formatCurrency(m.maxLaborSavings)}`],

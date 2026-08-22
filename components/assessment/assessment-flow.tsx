@@ -9,6 +9,7 @@ import {
   type Answers,
   type ContactInfo,
 } from "@/lib/assessment"
+import { formatPhone } from "@/lib/utils"
 import { ResultsView } from "@/components/assessment/results-view"
 
 type Step = "intro" | "contact" | number | "results"
@@ -144,7 +145,8 @@ export function AssessmentFlow() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-3xl px-6">
+    // The intro gets a wider column so its headline and subtext each hold two rows.
+    <div className={`mx-auto w-full px-6 ${step === "intro" ? "max-w-5xl" : "max-w-3xl"}`}>
       {step === "intro" && <IntroStep onStart={startAssessment} />}
 
       {step === "contact" && (
@@ -177,28 +179,31 @@ export function AssessmentFlow() {
 
 function IntroStep({ onStart }: { onStart: () => void }) {
   return (
-    <div className="mx-auto max-w-2xl py-4 text-center">
+    <div className="mx-auto py-4 text-center">
       <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-1.5 text-sm font-semibold text-foreground shadow-sm">
         <Sparkles className="h-4 w-4 text-teal" />
         Free Assessment
       </span>
-      <h1 className="mt-6 text-balance font-serif text-4xl font-normal leading-[1.08] tracking-tight text-navy-deep sm:text-5xl">
-        How Much Are Missed Client Calls Costing Your Office?
+      {/* Headline and subtext are each locked to two rows on desktop via explicit breaks. */}
+      <h1 className="mt-6 font-serif text-4xl font-normal leading-[1.12] tracking-tight text-navy-deep sm:text-5xl">
+        How much are missed customer orders
+        <br className="hidden sm:block" /> costing your restaurant?
       </h1>
-      <p className="mx-auto mt-5 max-w-xl text-pretty text-lg leading-relaxed text-muted-foreground">
-        Answer 5 quick questions to see how much revenue your office may be losing from missed calls—and how a Virtual
-        Receptionist could help you capture more opportunities.
+      <p className="mx-auto mt-5 text-pretty text-lg leading-relaxed text-muted-foreground">
+        Answer 5 quick questions to see how much sales of your restaurant goes to your competitors
+        <br className="hidden sm:block" /> and how our Virtual Receptionist can help bring that money back to your
+        business.
       </p>
       <div className="mt-9">
         <button
           type="button"
           onClick={onStart}
-          className="group relative isolate inline-flex items-center justify-center gap-2 overflow-hidden rounded-full bg-teal px-10 py-4 text-lg font-semibold text-primary-foreground transition-all duration-300 hover:bg-teal-bright hover:shadow-[0_0_28px_-4px_color-mix(in_oklch,var(--teal-bright)_80%,transparent)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-teal/60"
+          className="group relative isolate inline-flex items-center justify-center gap-2 overflow-hidden rounded-full bg-[var(--yellow-cta)] px-[5.5rem] py-4 text-xl font-semibold text-[var(--yellow-cta-ink)] transition-all duration-300 hover:brightness-105 hover:shadow-[0_0_28px_-4px_color-mix(in_oklch,var(--yellow-cta)_80%,transparent)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[color-mix(in_oklch,var(--yellow-cta)_60%,transparent)]"
         >
           <span aria-hidden="true" className="cta-runner" />
           <span className="relative z-[1] inline-flex items-center gap-2">
             Start Assessment
-            <ArrowRight className="h-5 w-5" />
+            <ArrowRight className="h-6 w-6" />
           </span>
         </button>
       </div>
@@ -305,7 +310,7 @@ function ContactStep({
           />
         </Field>
 
-        <Field label="Role in Office" error={errors.role}>
+        <Field label="Role with the Business" error={errors.role}>
           <select
             className={`${inputClass} appearance-none`}
             value={contact.role}
@@ -327,9 +332,11 @@ function ContactStep({
             type="tel"
             className={inputClass}
             value={contact.phone}
-            onChange={(e) => onChange({ phone: e.target.value })}
+            onChange={(e) => onChange({ phone: formatPhone(e.target.value) })}
             placeholder="(555) 123-4567"
             autoComplete="tel"
+            inputMode="tel"
+            maxLength={14}
           />
         </Field>
 
@@ -500,7 +507,7 @@ function NumberQuestion({
             }
           }}
           placeholder={placeholder}
-          aria-label="Average revenue per new client in dollars"
+          aria-label="Average transaction value in dollars"
           aria-invalid={error ? true : undefined}
           className={`w-full rounded-xl border bg-card py-4 pr-5 text-2xl font-semibold text-foreground shadow-sm outline-none transition-colors placeholder:font-normal placeholder:text-muted-foreground focus:ring-2 focus:ring-teal/40 ${
             prefix ? "pl-11" : "pl-5"

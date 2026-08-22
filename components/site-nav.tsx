@@ -7,8 +7,6 @@ import { BrandLockup } from "@/components/brand-lockup"
 
 const links = [
   { label: "Ashley", href: "/#ashley" },
-  { label: "Grace", href: "/#grace" },
-  { label: "Pearl", href: "/#pearl" },
   { label: "Industry Data", href: "/#industry-data" },
   { label: "How It Works", href: "/#how-it-works" },
 ]
