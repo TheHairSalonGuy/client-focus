@@ -39,59 +39,58 @@ export function FounderSection() {
               </h3>
               <div className="mt-4 space-y-4 text-lg leading-relaxed text-foreground/80">
                 <p>
-                  I built <strong className="font-semibold text-foreground">My Virtual Receptionist</strong>{" "}
-                  after seeing how many businesses lose revenue simply because their front-desk staff or admin teams
-                  are
-                  overwhelmed. Whether it&apos;s answering repetitive inquiries, taking food orders, managing
-                  appointment books, or screening clients, busy teams often struggle to keep up with incoming
-                  calls—especially during peak hours, lunch breaks, and after hours.
+                  I built <strong className="font-semibold text-foreground">My Virtual Receptionist</strong> after
+                  seeing how many restaurants lose sales simply because their floor staff or operators are overwhelmed.
+                  Whether it&apos;s taking multiple lunch or dinner orders at the same time, managing reservation books,
+                  answering repetitive inquiries, or handling takeout requests, busy teams often struggle to keep up
+                  with incoming calls—especially during peak hours, lunch rushes, and after hours.
                 </p>
                 <p>
-                  When a prospective client reaches a busy tone or a voicemail box, they don&apos;t wait—they
-                  immediately go back to <strong className="font-semibold text-foreground">Google or Yelp</strong> and
-                  call the next competitor on the list.
+                  When a hungry diner or prospective customer reaches a busy tone or a voicemail box, they don&apos;t
+                  wait—they immediately go back to{" "}
+                  <strong className="font-semibold text-foreground">Google or Yelp</strong> and call the next competitor
+                  on the list.
                 </p>
                 <p>
-                  My background spans operations management, financial services, software engineering, and restaurant
-                  ownership. Those experiences taught me a fundamental truth:{" "}
+                  My background spans operations management, software engineering, and restaurant ownership as a trained
+                  Owner/Chef. Those experiences taught me a fundamental truth:{" "}
                   <strong className="font-semibold text-foreground">
                     reliable intake systems, instant communication, and efficient follow-up workflows are essential to
-                    converting prospects into paying clients and keeping them long-term.
+                    converting hungry callers into paying customers and keeping them coming back.
                   </strong>
                 </p>
                 <p>
                   <strong className="font-semibold text-foreground">My Virtual Receptionist</strong> was created to
-                  bridge this gap for high-touch businesses—whether you run a restaurant, a law firm, dental practice,
-                  or accounting firm. We ensure every inquiry is handled seamlessly without adding
-                  expensive administrative overhead.
+                  bridge this gap specifically for restaurant owners and operators. We ensure every call is handled
+                  seamlessly without adding expensive administrative overhead.
                 </p>
               </div>
             </div>
 
             <div>
-              <h3 className="font-serif text-2xl font-semibold text-navy-deep">Why Businesses Trust Us</h3>
+              <h3 className="font-serif text-2xl font-semibold text-navy-deep">Why Restaurants Trust Us</h3>
               <div className="mt-4 space-y-6 text-lg leading-relaxed text-foreground/80">
                 <p>
                   Unlike off-the-shelf, generic software, I am personally involved in building, customizing, and
-                  continually optimizing our conversational voice models for every business we serve. We break down
+                  continually optimizing our conversational voice models for every restaurant we serve. We break down
                   our service into two fundamental pillars engineered to transform your operations:
                 </p>
 
                 <div>
                   <h4 className="text-xl font-semibold text-navy-deep">Pillar 1: An Unbreakable 24/7 Safety Net</h4>
                   <p className="mt-2">
-                    <strong className="font-semibold text-foreground">Never miss a client again.</strong> Our system
-                    picks up every inbound call instantly on Ring 1—24 hours a day, 7 days a week, 365 days a year. It
-                    answers client FAQs, conducts customized intake questionnaires, and captures hot leads long before
-                    they hit voicemail or call your competitor.
+                    <strong className="font-semibold text-foreground">Never miss a hungry caller again.</strong> Our
+                    system picks up every inbound call instantly on Ring 1—24 hours a day, 7 days a week, 365 days a
+                    year. It answers customer FAQs, takes accurate food and table orders, and captures hot sales long
+                    before they hit voicemail or send diners to a competitor.
                   </p>
                 </div>
 
                 <div>
                   <h4 className="text-xl font-semibold text-navy-deep">Pillar 2: Total Operational Efficiency</h4>
                   <p className="mt-2">
-                    We eliminate front-desk drag by automating your most repetitive administrative tasks. From taking
-                    multiple lunch orders at the same time and automating appointment reminders to pulling actionable
+                    We eliminate floor distraction by automating your most repetitive front-of-house tasks. From
+                    handling multiple lunch orders at once and managing booking schedules to pulling actionable
                     post-call summaries, we turn manual busywork into a seamless background machine.
                   </p>
                 </div>
@@ -105,13 +104,13 @@ export function FounderSection() {
               <div className="text-base leading-relaxed text-navy-deep">
                 <p className="text-lg font-bold text-navy-deep">Our Core Commitment</p>
                 <p className="mt-2 font-medium text-foreground/90">
-                  When you partner with us, your business becomes predictable, efficient, and unstoppable.
+                  When you partner with us, your restaurant operations become predictable, efficient, and unstoppable.
                 </p>
                 <p className="mt-3 font-medium text-foreground/90">
-                  By deploying a bulletproof virtual receptionist to automate everyday admin tasks, we help you capture
-                  more sales, leads, revenue and eliminate staff burnout. Your staff spends less
-                  time putting out fires and more time focused on high-value, client-facing work—boosting morale across
-                  your entire team while ensuring you never miss a client.
+                  By deploying a bulletproof virtual receptionist to handle everyday phone traffic, we help you capture
+                  more sales, increase table turns, and eliminate staff burnout. Your staff spends less time putting out
+                  fires on the phone and more time focused on high-value, guest-facing service—boosting morale across
+                  your entire floor while ensuring you never miss a single customer.
                 </p>
               </div>
             </div>
