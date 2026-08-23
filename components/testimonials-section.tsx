@@ -108,12 +108,12 @@ const SCENARIOS: Scenario[] = [
   },
   {
     quote:
-      "Pearl can answer approved questions about our hours, location, and services while collecting the reason for the call. That reduces repetitive interruptions for our front-desk team. We saved hours daily and use those hours on improving client services.",
+      "When I am meeting face-to-face with restaurant owners, I used to miss urgent calls from my accounts. Ashley now covers my line, takes new orders seamlessly, and even answers questions about current delivery statuses in real-time. My restaurant clients constantly praise how professional it is to always get an instant, accurate answer instead of voicemail.",
     name: "Diana Montessori",
-    role: "Front Office Coordinator",
-    industry: "Dental Practice",
+    role: "Sales Representative, Sysco Food Distribution",
+    industry: "Restaurant",
     image: "/images/testimonials/photo-8.png",
-    alt: "Portrait of a dental front office coordinator",
+    alt: "Portrait of a restaurant food distribution sales representative",
     attribution: "illustrative",
   },
   {
@@ -128,12 +128,12 @@ const SCENARIOS: Scenario[] = [
   },
   {
     quote:
-      "During our busiest hours, Pearl provides overflow coverage and records what each caller needs. Our staff can return calls in an organized way instead of sorting through incomplete voicemail messages.",
+      "Our equipment showroom and service lines get flooded with urgent inquiries from kitchen operators needing parts or emergency repairs. Ashley handles the heavy call volume instantly, collecting exact equipment models and issue details so our technicians arrive fully prepared. It has completely eliminated missed sales opportunities and streamlined our entire dispatch workflow.",
     name: "Bernadette Marks",
-    role: "Dental Operations Manager",
-    industry: "Dental Practice",
+    role: "Sales Manager, Apex Restaurant Equipment Distribution",
+    industry: "Restaurant",
     image: "/images/testimonials/photo-10.png",
-    alt: "Portrait of a dental operations manager",
+    alt: "Portrait of a restaurant equipment distribution sales manager",
     attribution: "illustrative",
   },
 ]
