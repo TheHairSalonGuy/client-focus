@@ -39,7 +39,7 @@ export function FounderSection() {
               </h3>
               <div className="mt-4 space-y-4 text-lg leading-relaxed text-foreground/80">
                 <p>
-                  I built <strong className="font-semibold text-foreground">My Virtual Receptionist</strong> after
+                  I built <strong className="font-semibold text-foreground">My Virtual Receptionist</strong>{" "}after
                   seeing how many restaurants lose sales simply because their floor staff or operators are overwhelmed.
                   Whether it&apos;s taking multiple lunch or dinner orders at the same time, managing reservation books,
                   answering repetitive inquiries, or handling takeout requests, busy teams often struggle to keep up
