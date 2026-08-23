@@ -58,12 +58,12 @@ const SCENARIOS: Scenario[] = [
   },
   {
     quote:
-      "We considered hiring additional staff for evenings and weekends, but the expense was difficult to justify. Grace gives our firm dependable 24/7 call coverage without requiring another full staffing shift. Grace was inexpensive — it was a no-brainer decision for us.",
-    name: "Rachel Moore",
-    role: "Attorney",
-    industry: "Law Firm",
+      "During our Friday night game rushes, the phone would ring constantly while our bartenders were slammed making drinks. Ashley picks up every call instantly on the first ring, answers table questions, and handles reservations without missing a beat. Our weekend sales jumped significantly because callers aren't hitting a busy signal anymore.",
+    name: "Maria Vance",
+    role: "Owner, The Foundry Sports Bar & Grill",
+    industry: "Restaurant",
     image: "/images/testimonials/photo-3.png",
-    alt: "Portrait of a law firm administrator",
+    alt: "Portrait of a sports bar and grill owner",
     attribution: "illustrative",
   },
   {
