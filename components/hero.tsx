@@ -93,9 +93,9 @@ export function Hero() {
     <section id="top" className="relative w-full">
       {/* Split hero: ~45% light content panel (left) + ~55% image panel (right).
           On mobile/tablet these stack (content first, image below) via grid-cols-1. */}
-      <div className="mx-auto grid w-full max-w-[1400px] gap-6 px-8 py-8 sm:px-10 lg:h-[calc(100vh-80px)] lg:grid-cols-[48%_52%] lg:gap-2 lg:px-16 lg:py-10 xl:px-20">
+      <div className="mx-auto grid w-full max-w-[1400px] gap-6 px-8 py-8 sm:px-10 lg:min-h-[calc(100vh-80px)] lg:grid-cols-[48%_52%] lg:gap-2 lg:pl-6 lg:pr-16 lg:py-10 xl:pl-6 xl:pr-2">
         {/* ---------------- LEFT: content panel ---------------- */}
-        <div className="relative z-10 w-full flex flex-col justify-center bg-background px-6 pb-12 pt-20 sm:px-10 lg:items-center lg:justify-center lg:overflow-visible lg:pl-12 lg:pr-12 lg:pb-0 lg:pt-8 xl:pl-4 xl:pr-16">
+        <div className="relative z-10 w-full flex flex-col justify-center bg-background px-6 pb-12 pt-20 sm:px-10 lg:items-center lg:justify-center lg:overflow-visible lg:pl-6 lg:pr-12 lg:pb-0 lg:pt-8 xl:pl-0 xl:pr-16">
           <div className="mx-auto w-full max-w-4xl lg:ml-auto lg:mr-0">
             {/* Main sales headline. "Never Miss Another" navy, final word teal, elegant
                 serif, forced onto exactly two lines. The final word is an interactive vertical
@@ -103,7 +103,7 @@ export function Hero() {
                 below. */}
             <h2 className="word-swap-group relative font-serif text-6xl font-normal leading-[1.03] tracking-tight text-balance lg:text-[4.25rem] xl:text-7xl">
               <span className="block text-navy-deep">Never Miss</span>
-              <span className="block">
+              <span className="block whitespace-nowrap">
                 <span className="text-navy-deep">Another </span>
                 <span className="word-swap-window text-teal">
                   <span className="word-swap-track">
@@ -111,6 +111,27 @@ export function Hero() {
                     <span>Order.</span>
                   </span>
                 </span>
+              </span>
+              {/* White light reflection sweeping left-to-right across the headline, matching
+                  the wordmark's .brand-glint (see BrandLockup). Purely decorative overlay
+                  mirroring the visible text's line breaks; clipped to the text via inline
+                  background-clip so the compiler can't strip it. */}
+              <span
+                aria-hidden="true"
+                className="headline-glint pointer-events-none absolute inset-0 select-none"
+                style={{
+                  backgroundImage:
+                    "linear-gradient(105deg, transparent 44%, rgba(255,255,255,0.9) 50%, transparent 56%)",
+                  backgroundSize: "220% 100%",
+                  backgroundRepeat: "no-repeat",
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  color: "transparent",
+                }}
+              >
+                <span className="block">Never Miss</span>
+                <span className="block whitespace-nowrap">Another {HEADLINE_WORD}</span>
               </span>
             </h2>
 
