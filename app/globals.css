@@ -198,17 +198,17 @@
    live inline on the element; here we only animate background-position. The bright
    band glides across the two lines (~1.75s), then rests until the 5s loop repeats. */
 .headline-glint {
-  background-position: -40% 0;
+  background-position: 160% 0;
   animation: headline-glint-sweep 5s ease-in-out infinite;
 }
 
 @keyframes headline-glint-sweep {
   0% {
-    background-position: -40% 0;
+    background-position: 160% 0;
   }
   35%,
   100% {
-    background-position: 160% 0;
+    background-position: -40% 0;
   }
 }
 
