@@ -1,6 +1,6 @@
 const steps = [
   {
-    title: "Call Ashley, Grace, or Pearl",
+    title: "Call Ashley at 626-621-5577",
     body: "Dial the number and hear the experience for yourself, no setup required.",
   },
   {
