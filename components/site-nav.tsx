@@ -37,7 +37,7 @@ export function SiteNav() {
     <header className="fixed inset-x-0 top-0 z-50 bg-background">
       {/* Full-width padding matches the hero's left content panel (px-6 / sm:px-10 /
           lg:px-14) so the logo's left edge lines up exactly with the "Never" headline. */}
-      <nav className="flex w-full items-center justify-between gap-4 px-6 py-4 sm:px-10 lg:px-14">
+      <nav className="mx-auto flex w-full max-w-[1400px] items-center justify-between gap-4 px-8 py-4 sm:px-10 lg:px-16 xl:px-20">
         {/* Left: logo + company name */}
         <BrandLockup />
 

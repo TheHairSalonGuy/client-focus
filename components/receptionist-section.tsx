@@ -26,7 +26,7 @@ export function ReceptionistSection({
   align = "left",
 }: ReceptionistSectionProps) {
   return (
-    <section id={id} className="relative border-t border-border py-24 md:py-32">
+    <section id={id} className="relative py-24 md:py-32">
       <div className="mx-auto max-w-[1500px] px-8 md:px-10">
         <div
           className={`grid items-start gap-12 lg:grid-cols-2 lg:gap-20 ${
