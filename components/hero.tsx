@@ -91,15 +91,15 @@ export function Hero() {
     <section id="top" className="relative w-full">
       {/* Split hero: ~45% light content panel (left) + ~55% image panel (right).
           On mobile/tablet these stack (content first, image below) via grid-cols-1. */}
-      <div className="grid w-full grid-cols-1 lg:h-[calc(100vh-80px)] lg:grid-cols-[45%_55%]">
+      <div className="grid w-full grid-cols-1 lg:h-[calc(100vh-80px)] lg:grid-cols-[48%_52%]">
         {/* ---------------- LEFT: content panel ---------------- */}
-        <div className="relative z-10 w-full flex flex-col justify-center bg-background px-6 pb-12 pt-20 sm:px-10 lg:justify-start lg:pl-12 lg:pr-12 lg:pb-4 lg:pt-4 xl:pl-16 xl:pr-16">
+        <div className="relative z-10 w-full flex flex-col justify-center bg-background px-6 pb-12 pt-20 sm:px-10 lg:justify-start lg:overflow-visible lg:pl-12 lg:pr-12 lg:pb-0 lg:pt-20 xl:pl-16 xl:pr-16">
           <div className="mx-auto w-full max-w-4xl lg:ml-auto lg:mr-0">
             {/* Main sales headline. "Never Miss Another" navy, final word teal, elegant
                 serif, forced onto exactly two lines. The final word is an interactive vertical
                 text-swap: on hover "Client" slides up out of view while "Order" slides in from
                 below. */}
-            <h2 className="word-swap-group relative font-serif text-6xl font-normal leading-[1.03] tracking-tight text-balance lg:text-5xl xl:text-6xl">
+            <h2 className="word-swap-group relative font-serif text-6xl font-normal leading-[1.03] tracking-tight text-balance lg:text-[2.75rem] xl:text-5xl">
               <span className="block text-navy-deep">Never Miss</span>
               <span className="block">
                 <span className="text-navy-deep">Another </span>
@@ -139,7 +139,7 @@ export function Hero() {
             </ul>
 
             {/* Book a Demo button — matches the navigation CTA (teal pill + running highlight). */}
-            <div className="mt-4">
+            <div className="mt-3">
               <a
                 href={CALENDLY_URL}
                 target="_blank"
@@ -158,7 +158,7 @@ export function Hero() {
         {/* Full-bleed photo carousel across the four restaurant categories. Each slide
             cross-fades; the right arrow advances Fine Dining → Casual → Quick Service →
             Bar & Grill (wrapping), the left arrow steps back. */}
-        <div className="relative w-full aspect-[4/3] bg-muted lg:aspect-auto lg:h-full lg:min-h-[500px]">
+        <div className="relative w-full aspect-[4/3] bg-muted lg:aspect-auto lg:h-full lg:min-h-0">
           {SLIDES.map((slide, i) => (
             <div
               key={slide.id}
@@ -170,9 +170,9 @@ export function Hero() {
                 src={slide.src || "/placeholder.svg"}
                 alt={slide.alt}
                 fill
-                priority={i === 0}
+                priority={i === 1}
                 sizes="(max-width: 1024px) 100vw, 55vw"
-                className={`scale-[0.94] object-cover ${slide.objectPosition}`}
+                className={`object-cover ${slide.objectPosition}`}
               />
             </div>
           ))}
