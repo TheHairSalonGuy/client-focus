@@ -93,7 +93,7 @@ export function Hero() {
           On mobile/tablet these stack (content first, image below) via grid-cols-1. */}
       <div className="grid w-full grid-cols-1 lg:h-[calc(100vh-80px)] lg:grid-cols-[48%_52%]">
         {/* ---------------- LEFT: content panel ---------------- */}
-        <div className="relative z-10 w-full flex flex-col justify-center bg-background px-6 pb-12 pt-20 sm:px-10 lg:justify-start lg:overflow-visible lg:pl-12 lg:pr-12 lg:pb-0 lg:pt-20 xl:pl-16 xl:pr-16">
+        <div className="relative z-10 w-full flex flex-col justify-center bg-background px-6 pb-12 pt-20 sm:px-10 lg:items-center lg:justify-center lg:overflow-visible lg:pl-12 lg:pr-12 lg:pb-0 lg:pt-20 xl:pl-16 xl:pr-16">
           <div className="mx-auto w-full max-w-4xl lg:ml-auto lg:mr-0">
             {/* Main sales headline. "Never Miss Another" navy, final word teal, elegant
                 serif, forced onto exactly two lines. The final word is an interactive vertical
@@ -139,7 +139,7 @@ export function Hero() {
             </ul>
 
             {/* Book a Demo button — matches the navigation CTA (teal pill + running highlight). */}
-            <div className="mt-3">
+            <div className="mt-6">
               <a
                 href={CALENDLY_URL}
                 target="_blank"
