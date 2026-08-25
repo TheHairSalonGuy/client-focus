@@ -37,7 +37,7 @@ const BENEFITS: Benefit[] = [
   },
 ]
 
-// Ordered carousel slides. Index 0 (Fine Dining) is shown on page load.
+// Ordered carousel slides. Index 1 (Fine Dining) is shown on page load.
 const SLIDES: Slide[] = [
   {
     id: "thai-restaurant",
@@ -78,7 +78,7 @@ const SLIDES: Slide[] = [
 
 export function Hero() {
   // Index-based carousel: 0 = Fine Dining (default) → Casual → Quick Service → Bar & Grill.
-  const [index, setIndex] = useState(0)
+  const [index, setIndex] = useState(1)
 
   const goPrev = () => setIndex((i) => (i - 1 + SLIDES.length) % SLIDES.length)
   const goNext = () => setIndex((i) => (i + 1) % SLIDES.length)
@@ -91,15 +91,15 @@ export function Hero() {
     <section id="top" className="relative w-full">
       {/* Split hero: ~45% light content panel (left) + ~55% image panel (right).
           On mobile/tablet these stack (content first, image below) via grid-cols-1. */}
-      <div className="grid w-full grid-cols-1 lg:min-h-[85vh] lg:grid-cols-[45%_55%]">
+      <div className="grid w-full grid-cols-1 lg:h-[calc(100vh-80px)] lg:grid-cols-[45%_55%]">
         {/* ---------------- LEFT: content panel ---------------- */}
-        <div className="relative z-10 w-full flex flex-col justify-center bg-background px-6 pb-12 pt-20 sm:px-10 lg:justify-start lg:pl-12 lg:pr-12 lg:pb-8 lg:pt-[72px] xl:pl-16 xl:pr-16">
+        <div className="relative z-10 w-full flex flex-col justify-center bg-background px-6 pb-12 pt-20 sm:px-10 lg:justify-start lg:pl-12 lg:pr-12 lg:pb-4 lg:pt-4 xl:pl-16 xl:pr-16">
           <div className="mx-auto w-full max-w-4xl lg:ml-auto lg:mr-0">
             {/* Main sales headline. "Never Miss Another" navy, final word teal, elegant
                 serif, forced onto exactly two lines. The final word is an interactive vertical
                 text-swap: on hover "Client" slides up out of view while "Order" slides in from
                 below. */}
-            <h2 className="word-swap-group relative font-serif text-7xl font-normal leading-[1.03] tracking-tight text-balance lg:text-8xl">
+            <h2 className="word-swap-group relative font-serif text-6xl font-normal leading-[1.03] tracking-tight text-balance lg:text-5xl xl:text-6xl">
               <span className="block text-navy-deep">Never Miss</span>
               <span className="block">
                 <span className="text-navy-deep">Another </span>
@@ -113,19 +113,19 @@ export function Hero() {
             </h2>
 
             {/* Supporting question heading */}
-            <h3 className="mt-5 text-pretty text-2xl font-bold leading-snug text-foreground sm:text-3xl">{LEAD}</h3>
+            <h3 className="mt-3 text-pretty text-xl font-bold leading-snug text-foreground sm:text-2xl lg:text-lg xl:text-xl">{LEAD}</h3>
 
             {/* Supporting copy */}
-            <div className="mt-4 space-y-3">
-              <p className="text-pretty text-2xl font-medium leading-relaxed text-foreground">{BODY_PARAGRAPH}</p>
+            <div className="mt-3 space-y-2">
+              <p className="text-pretty text-xl font-medium leading-relaxed text-foreground lg:text-sm lg:leading-snug">{BODY_PARAGRAPH}</p>
             </div>
 
             {/* Benefit rows — each keeps the subtle proximity hover (lift + scale + brighten). */}
-            <ul className="mt-5 grid gap-2.5">
+            <ul className="mt-4 grid gap-2">
               {BENEFITS.map((benefit) => (
                 <li
                   key={benefit.title}
-                  className="group flex origin-left transform-gpu items-start gap-3 py-0.5 text-xl leading-relaxed text-foreground transition-all duration-300 ease-out hover:-translate-y-1 hover:scale-[1.03] hover:brightness-110 sm:text-2xl"
+                  className="group flex origin-left transform-gpu items-start gap-3 py-0.5 text-lg leading-snug text-foreground transition-all duration-300 ease-out hover:-translate-y-1 hover:scale-[1.03] hover:brightness-110 sm:text-2xl lg:text-sm"
                 >
                   <span className="mt-0.5 flex h-6 w-6 flex-none items-center justify-center rounded-full bg-teal/15 text-teal transition-colors duration-300 ease-out group-hover:bg-teal/25 group-hover:text-teal-bright">
                     <Check className="h-4 w-4" strokeWidth={3} />
@@ -158,7 +158,7 @@ export function Hero() {
         {/* Full-bleed photo carousel across the four restaurant categories. Each slide
             cross-fades; the right arrow advances Fine Dining → Casual → Quick Service →
             Bar & Grill (wrapping), the left arrow steps back. */}
-        <div className="relative w-full aspect-[4/3] lg:aspect-auto lg:h-full lg:min-h-[500px]">
+        <div className="relative w-full aspect-[4/3] bg-muted lg:aspect-auto lg:h-full lg:min-h-[500px]">
           {SLIDES.map((slide, i) => (
             <div
               key={slide.id}
@@ -172,7 +172,7 @@ export function Hero() {
                 fill
                 priority={i === 0}
                 sizes="(max-width: 1024px) 100vw, 55vw"
-                className={`object-cover ${slide.objectPosition}`}
+                className={`scale-[0.94] object-cover ${slide.objectPosition}`}
               />
             </div>
           ))}
