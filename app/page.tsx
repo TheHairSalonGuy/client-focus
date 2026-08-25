@@ -25,10 +25,10 @@ export default function Home() {
           phoneHref="tel:+16266215577"
           callLabel="Call Ashley"
           capabilities={[
-            "Available 24/7—including after hours, weekends, and peak lunch/dinner rushes",
             "Answer multiple calls at the same time so customers never hit a busy signal and ALL orders are captured instantly",
             "Handle routine menu FAQs and take-out orders, saving your waitresses hours of phone duty and freeing them up to better service dining-in customers",
-            "Reduce labor costs ($1600+ per month). When you switch to using Ashley you'll save thousands",
+            "Available 24/7—including after hours, weekends, and peak lunch/dinner rushes",
+            "Increase average order value with consistent upsell suggestions—drinks, sides, and add-ons a rushed staff member often forgets to mention",
             "Deliver an organized order summary and text payment links so you get paid before the kitchen starts cooking, eliminating unpaid or wasted food",
           ]}
         />
