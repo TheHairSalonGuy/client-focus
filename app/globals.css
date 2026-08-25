@@ -171,17 +171,17 @@
    7s loop repeats. Because the highlight is clipped to the text, it never appears as a
    band over the photo. */
 .brand-glint {
-  background-position: -60% 0;
+  background-position: 160% 0;
   animation: brand-glint-sweep 7s ease-in-out infinite;
 }
 
 @keyframes brand-glint-sweep {
   0% {
-    background-position: -60% 0;
+    background-position: 160% 0;
   }
   23%,
   100% {
-    background-position: 160% 0;
+    background-position: -60% 0;
   }
 }
 

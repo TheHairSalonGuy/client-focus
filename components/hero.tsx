@@ -139,13 +139,13 @@ export function Hero() {
             </ul>
 
             {/* Book a Demo button — matches the navigation CTA (teal pill + running highlight). */}
-            <div className="mt-6">
+            <div className="mt-10">
               <a
                 href={CALENDLY_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Book a demo — opens Calendly in a new tab"
-                className="group relative isolate inline-flex w-auto items-center justify-center overflow-hidden rounded-lg bg-[#124E8C] px-8 py-5 text-2xl font-semibold tracking-wide text-white transition-all duration-300 hover:bg-[#0e3f72] hover:shadow-[0_0_24px_-4px_rgba(18,78,140,0.7)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#124E8C]/50"
+                className="group relative isolate inline-flex w-auto items-center justify-center overflow-hidden rounded-lg bg-[#124E8C] px-14 py-5 text-2xl font-semibold tracking-wide text-white transition-all duration-300 hover:bg-[#0e3f72] hover:shadow-[0_0_24px_-4px_rgba(18,78,140,0.7)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#124E8C]/50"
               >
                 <span aria-hidden="true" className="cta-runner" />
                 <span className="relative z-[1]">Book a Demo</span>
