@@ -69,7 +69,7 @@ export function ReceptionistSection({
           </div>
 
           {/* Right: capabilities */}
-          <div className="rounded-3xl border border-border bg-card/50 p-8 backdrop-blur-sm md:p-10">
+          <div className="rounded-3xl border border-border bg-[#FDF1DE] p-8 backdrop-blur-sm md:p-10">
             <p className="text-sm font-bold uppercase tracking-[0.2em] text-foreground">
               What {name} can do
             </p>
