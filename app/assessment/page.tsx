@@ -3,9 +3,9 @@ import { AssessmentFlow } from "@/components/assessment/assessment-flow"
 import { BrandLockup } from "@/components/brand-lockup"
 
 export const metadata: Metadata = {
-  title: "Free Assessment — What Are Missed Customer Orders Costing Your Restaurant? | My Virtual Receptionist",
+  title: "Free Assessment — What Are Missed Calls Costing Your Office? | My Virtual Receptionist",
   description:
-    "Answer 5 quick questions to see how much sales of your restaurant goes to your competitors and get your Virtual Receptionist Opportunity Score.",
+    "Answer 5 quick questions to see how much revenue your office may be losing from missed calls and get your Virtual Receptionist Opportunity Score.",
 }
 
 export default function AssessmentPage() {

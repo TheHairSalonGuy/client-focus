@@ -14,22 +14,32 @@ export type SubmitState = "idle" | "submitting" | "done" | "error"
  *
  * A deliberately simple, image-led layout:
  *   1. Wide comparison image (~80% of the section) with only two dollar amounts
- *      overlaid — a navy-bordered missed-call box above her left hand and a
- *      green-bordered monthly revenue box above the money in her right hand. No
- *      labels or paragraphs over the woman.
+ *      overlaid — a navy-bordered hourly box above her left hand (with a compact
+ *      Essential/Professional toggle) and a green-bordered monthly revenue box
+ *      above the money in her right hand. No labels or paragraphs over the woman.
  *   2. A plain-text explanation + transparent calculation + disclaimer (no cards).
  *   3. Two CTAs: "Call to Test" (scrolls home to the Grace/Pearl section) and
  *      "Book a Demo" (Calendly).
  *
- * Every figure is derived from the assessment answers (buildResult -> metrics).
+ * Every figure is derived from the assessment answers (buildResult -> metrics);
+ * only the two fixed hourly plan rates are hardcoded (they are pricing, not data).
  */
+
+// Fixed hourly investment rates. These are plan prices, NOT assessment-derived values.
+// The toggle only swaps between these two numbers — it never touches the revenue math.
+const PLAN_RATES = {
+  Professional: 6.24,
+  Essential: 3.11,
+} as const
+
+type PlanKey = keyof typeof PLAN_RATES
 
 /* --------------------------------- Count-up hook -------------------------------- */
 
 /**
  * Smoothly animates a number up to `target` using an ease-out curve. On mount it
- * counts up from 0; when `target` changes it animates from the last settled
- * value. Honors prefers-reduced-motion by snapping instantly.
+ * counts up from 0; when `target` changes (plan toggle) it animates from the last
+ * settled value. Honors prefers-reduced-motion by snapping instantly.
  */
 function useCountUp(target: number, { duration = 1200, decimals = 0 }: { duration?: number; decimals?: number } = {}) {
   const [value, setValue] = useState(0)
@@ -83,15 +93,15 @@ export function ResultsView({
   submitState?: SubmitState
 }) {
   const { metrics } = buildResult(answers)
+  const [plan, setPlan] = useState<PlanKey>("Professional")
 
   // Animated figures.
   const revenue = useCountUp(metrics.midpointRevenue, { duration: 1300 })
-  const annual = useCountUp(metrics.annualRevenue, { duration: 1300 })
-  const missedCalls = useCountUp(metrics.missedCallsPerMonth, { duration: 1300 })
+  const hourly = useCountUp(PLAN_RATES[plan], { duration: 900, decimals: 2 })
 
   function scrollToCall() {
-    // "Call to Test" returns to the main site and scrolls to the Ashley demo section.
-    window.location.href = "/#ashley"
+    // "Call to Test" returns to the main site and scrolls to the Grace/Pearl demo section.
+    window.location.href = "/#grace"
   }
 
   return (
@@ -109,26 +119,50 @@ export function ResultsView({
           className="object-cover"
         />
 
-        {/* Left hand — missed-call volume metric, resting on the woman's open palm. */}
-        <div className="absolute left-[8%] top-[56%] w-[22%] max-w-[200px]">
+        {/* Left hand — compact baby-blue hourly box + plan toggle, resting directly
+            on top of the woman's open palm (viewer's left). */}
+        <div className="absolute left-[8%] top-[58%] w-[20%] max-w-[190px]">
           <div className="rounded-2xl border-2 border-navy-deep bg-sky-100 px-1.5 py-2 text-center shadow-lg sm:px-2.5 sm:py-3">
-            <p className="font-serif text-xl font-normal leading-none text-navy-deep sm:text-3xl md:text-4xl">
-              {missedCalls.toLocaleString("en-US")}
+            <p className="font-serif text-lg font-normal leading-none text-navy-deep sm:text-2xl md:text-3xl">
+              ${hourly.toFixed(2)}
+              <span className="font-sans text-[11px] font-semibold text-muted-foreground sm:text-sm">/hour</span>
             </p>
-            <p className="mt-1 text-[9px] font-semibold uppercase leading-tight tracking-wide text-muted-foreground sm:text-[11px]">
-              Total Missed Calls / Month
-            </p>
+
+            {/* Compact toggle — only swaps the hourly figure above */}
+            <div
+              role="group"
+              aria-label="Choose plan"
+              className="mt-1.5 inline-flex rounded-full border border-border bg-muted p-0.5 sm:mt-2"
+            >
+              {(Object.keys(PLAN_RATES) as PlanKey[]).map((key) => {
+                const active = plan === key
+                return (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => setPlan(key)}
+                    aria-pressed={active}
+                    className={`rounded-full px-2 py-0.5 text-[9px] font-semibold transition-colors sm:px-2.5 sm:py-1 sm:text-xs ${
+                      active ? "bg-navy-deep text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    {key}
+                  </button>
+                )
+              })}
+            </div>
+
+            {/* "Plan" label directly below the toggle */}
+            <p className="mt-0.5 text-[9px] font-medium leading-none text-muted-foreground">Plan</p>
           </div>
         </div>
 
-        {/* Right hand — main financial impact, centered over the stack of money. */}
-        <div className="absolute right-[9%] top-[42%] w-[24%] max-w-[222px]">
+        {/* Right hand — solid-white monthly revenue box, ~15% smaller and centered
+            directly over the stack of money. */}
+        <div className="absolute right-[9%] top-[44%] w-[24%] max-w-[222px]">
           <div className="rounded-2xl border-2 border-success bg-sky-100 px-2 py-1.5 text-center shadow-lg sm:px-2.5 sm:py-2.5">
             <p className="font-serif text-xl font-normal leading-none text-success sm:text-3xl md:text-4xl">
               {money(revenue)}
-            </p>
-            <p className="mt-1 text-[9px] font-semibold uppercase leading-tight tracking-wide text-muted-foreground sm:text-[11px]">
-              Monthly Revenue Belonging to Your Business
             </p>
           </div>
         </div>
@@ -138,36 +172,29 @@ export function ResultsView({
       {/* max-w-5xl matches the hero image width, so the left/right text edges line
           up vertically with the image borders above. */}
       <div className="mx-auto mt-8 max-w-5xl">
-        {/* Main copy — every figure is derived from the assessment answers. The two
-            headline amounts (monthly and annual sales lost) are set two type steps
-            above the body text so they read at a glance. */}
+        {/* Main paragraph — copy changes based on the selected plan; the revenue
+            figure stays dynamic (derived from the assessment answers). */}
         <div className="space-y-4 text-pretty text-lg leading-relaxed text-foreground">
           <p>
-            Based on your assessment answers, your restaurant is losing an estimated{" "}
-            <strong className="align-baseline text-xl font-bold text-navy-deep md:text-2xl">{money(revenue)}</strong>{" "}
-            per month from unanswered calls, or{" "}
-            <strong className="align-baseline text-xl font-bold text-navy-deep md:text-2xl">{money(annual)}</strong> per
-            year ({money(metrics.midpointRevenue)}
-            {" \u00D7 12"}). In addition, your customers frequent your restaurant
-            regularly — {metrics.visitFrequencyPhrase} — that&apos;s another{" "}
-            <strong className="font-bold text-navy-deep">{money(metrics.lifetimeValue)}</strong> per customer that
-            should have come to your business if all calls were answered.
-          </p>
-
-          <p>
-            Based on your result, we strongly recommend deploying our Virtual Receptionist. All calls will be answered,
-            your staff will get back{" "}
-            <strong className="font-bold text-navy-deep">
-              {metrics.recoveredHoursPerMonth.toLocaleString("en-US")}
-            </strong>{" "}
-            hours per month, and your business will potentially get back{" "}
+            Based on your assessment answers, your office has an estimated{" "}
             <strong className="font-bold text-navy-deep">{money(metrics.midpointRevenue)}</strong> monthly revenue
-            belonging to your business.
+            opportunity from unanswered calls.
           </p>
 
-          <p>
-            To get started, please click &quot;Book a Demo&quot; below and speak with our Customer Success Team Member.
-          </p>
+          {plan === "Essential" ? (
+            <p>
+              With the <strong className="font-bold text-navy-deep">Essential Plan</strong>, your Virtual Receptionist
+              costs only <strong className="font-bold text-navy-deep">$3.11 per hour</strong> to answer calls 24/7,
+              gather the caller&apos;s reason for calling, and send an organized summary directly to your email inbox.
+            </p>
+          ) : (
+            <p>
+              With the <strong className="font-bold text-navy-deep">Professional Plan</strong>, your Virtual
+              Receptionist costs only <strong className="font-bold text-navy-deep">$6.24 per hour</strong> to handle
+              multiple calls at once 24/7, collect full intake details, prepare organized summaries, book appointments,
+              and send automatic reminders.
+            </p>
+          )}
         </div>
 
         {/* CTAs — moved up one row, immediately below the main paragraph */}
@@ -190,22 +217,12 @@ export function ResultsView({
           </a>
         </div>
 
-        {/* Calculation breakdown — two dynamic formulas, both driven by the
-            visitor's own answers so the math is fully auditable. */}
-        <div className="mt-6 space-y-2 text-sm leading-relaxed text-muted-foreground">
-          <p>
-            Calculation based on your answers: {metrics.midpointCalls} missed calls per day &times;{" "}
-            {money(metrics.clientValue)} average transaction &times; 30 days ={" "}
-            <strong className="font-semibold text-foreground">{money(metrics.midpointRevenue)}</strong> total estimated
-            monthly sales lost.
-          </p>
-          <p>
-            Customer Value per Year: {metrics.visitsPerMonth} orders per month &times; {money(metrics.clientValue)}{" "}
-            average transaction &times; 12 months ={" "}
-            <strong className="font-semibold text-foreground">{money(metrics.lifetimeValue)}</strong> annual customer
-            value.
-          </p>
-        </div>
+        {/* Calculation */}
+        <p className="mt-6 text-sm leading-relaxed text-muted-foreground">
+          Calculation: {metrics.midpointCalls} unanswered calls per day × {money(metrics.clientValue)} average client
+          value × 30 days × {metrics.conversionPercent}% conversion rate ={" "}
+          {money(metrics.midpointRevenue)} estimated monthly revenue opportunity.
+        </p>
 
         {/* Disclaimer — directly below the calculation line */}
         <p className="mt-3 text-xs leading-relaxed text-muted-foreground">

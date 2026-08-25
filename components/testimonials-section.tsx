@@ -10,7 +10,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react"
  * (an authorized name/company) and permission to use the image/identity.
  */
 type Attribution = "illustrative" | "verified"
-type Industry = "Restaurant" | "Law Firm" | "Dental Practice"
+type Industry = "Law Firm" | "Dental Practice"
 
 type Scenario = {
   quote: string
@@ -28,99 +28,89 @@ type Scenario = {
 const SCENARIOS: Scenario[] = [
   {
     quote:
-      "Since letting Ashley handle our phone lines, our lunch take-out orders have surged. We had no idea how many paying customers we were losing to busy signals until Ashley captured every single call—it's a game-changer for any restaurant looking to boost daily revenue without adding extra staff.",
-    name: "P' Joe",
-    role: 'Owner/Chef\n"Modern Thai Cuisine"',
-    industry: "Restaurant",
-    image: "/images/testimonials/chef-joe.png",
-    alt: "Portrait of a restaurant owner and chef",
-    attribution: "illustrative",
-  },
-  {
-    quote:
-      "Our front desk team used to drown in phone traffic trying to answer menu questions and take messages during dinner service. Ashley now captures all caller inquiries and manages peak-hour volume smoothly. Our floor staff can keep 100% of their focus on the guests sitting right in front of them.",
-    name: "Danielle Sterling",
-    role: "General Manager, Mastro Seafood Grill",
-    industry: "Restaurant",
+      "Before adding Grace, we did not realize how many potential clients were calling after hours. Now every caller receives an immediate response, and our team has the information needed to follow up the next morning.",
+    name: "Lillian McNaire",
+    role: "Managing Attorney",
+    industry: "Law Firm",
     image: "/images/testimonials/photo-1.png",
     alt: "Portrait of a managing attorney",
     attribution: "illustrative",
   },
   {
     quote:
-      "People looking for a table on a Saturday night hate voicemail. Ashley gives our restaurant immediate 24/7 responsiveness, handling schedule inquiries and guest FAQs instantly. It’s like having a dedicated receptionist who never takes a break and keeps our dining room fully booked.",
-    name: "Antonia Rossi",
-    role: "Managing Partner, Rossi's Italian Bistro",
-    industry: "Restaurant",
+      "Our staff can take lunch without worrying about calls going unanswered. She also takes calls during after hours and weekends so we never miss a client's call. Pearl captures why the patient called and sends our team a clear summary, making follow-up much easier.",
+    name: "Ashley Chen",
+    role: "Dental Office Manager",
+    industry: "Dental Practice",
     image: "/images/testimonials/photo-2.png",
     alt: "Portrait of a dental office manager",
     attribution: "illustrative",
   },
   {
     quote:
-      "During our Friday night game rushes, the phone would ring constantly while our bartenders were slammed making drinks. Ashley picks up every call instantly on the first ring, answers table questions, and handles reservations without missing a beat. Our weekend sales jumped significantly because callers aren't hitting a busy signal anymore.",
-    name: "Maria Vance",
-    role: "Owner, The Foundry Sports Bar & Grill",
-    industry: "Restaurant",
+      "We considered hiring additional staff for evenings and weekends, but the expense was difficult to justify. Grace gives our firm dependable 24/7 call coverage without requiring another full staffing shift. Grace was inexpensive — it was a no-brainer decision for us.",
+    name: "Rachel Moore",
+    role: "Attorney",
+    industry: "Law Firm",
     image: "/images/testimonials/photo-3.png",
-    alt: "Portrait of a sports bar and grill owner",
+    alt: "Portrait of a law firm administrator",
     attribution: "illustrative",
   },
   {
     quote:
-      "Our wholesale clients used to struggle to reach us when our office team was tied up on other lines. Ashley manages high call volumes effortlessly, routes urgent orders to the right department, and logs every caller's details accurately. It completely eliminated our missed order opportunities.",
-    name: "Michelle Chen",
-    role: "Director of Operations, Michael & Son Food Distributor",
-    industry: "Restaurant",
+      "Pearl collects the caller's contact details, dental concerns, and reason for calling. Our front desk can begin each follow-up conversation already knowing what the prospective patient needs.",
+    name: "Emily Johnson",
+    role: "Dentist/Co-Owner",
+    industry: "Dental Practice",
     image: "/images/testimonials/photo-4.png",
     alt: "Portrait of a dental practice owner",
     attribution: "illustrative",
   },
   {
     quote:
-      "As an owner-chef, I can't be glued to the phone while running the kitchen line. Ashley handles our phone traffic seamlessly, answering questions about our daily specials and hours. It has captured missed sales we used to lose to nearby competitors simply because our phones went to voicemail.",
-    name: "Carla Mendez",
-    role: "Owner & Executive Chef, Azul Modern Mexican",
-    industry: "Restaurant",
+      "Grace asks our approved intake questions and organizes the caller's answers. Our staff spends less time collecting basic information and more time evaluating whether the matter may be a fit.",
+    name: "Gerry Martinez",
+    role: "Intake Manager",
+    industry: "Law Firm",
     image: "/images/testimonials/photo-5.png",
     alt: "Portrait of a legal intake manager",
     attribution: "illustrative",
   },
   {
     quote:
-      "Ashley answers approved menu and seating questions with total accuracy while recording the exact reason for the call. That drastically reduces repetitive interruptions for our floor staff during the dinner rush, saving us hours daily and letting us focus entirely on guest satisfaction.",
-    name: "Sarah Jenkins",
-    role: "Front-of-House Lead, Harborview Steakhouse & Bar",
-    industry: "Restaurant",
+      "Our front desk used to struggle when several patients called at once. Pearl can respond to multiple callers so patients are not immediately sent to voicemail during busy periods.",
+    name: "Kisha Young",
+    role: "Dental Practice Administrator",
+    industry: "Dental Practice",
     image: "/images/testimonials/photo-6.png",
     alt: "Portrait of a dental practice administrator",
     attribution: "illustrative",
   },
   {
     quote:
-      "During our busiest lunch hours, Ashley provides bulletproof overflow coverage and logs what each caller needs. Our team can return inquiries in an organized way instead of sorting through chaotic, incomplete voicemail messages. It's transformed our daily operations.",
-    name: "Danielle Thorne",
-    role: "Owner, Thorne's Downtown Tap House",
-    industry: "Restaurant",
+      "People don't like leaving voicemail anymore. Many callers will contact the next law firm instead of leaving a voicemail. Grace gives them an immediate response and captures their information while they are still looking for help.",
+    name: "Evan O'Rourke",
+    role: "Founding Attorney",
+    industry: "Law Firm",
     image: "/images/testimonials/photo-7.png",
     alt: "Portrait of a founding attorney",
     attribution: "illustrative",
   },
   {
     quote:
-      "When I am meeting face-to-face with restaurant owners, I used to miss urgent calls from my accounts. Ashley now covers my line, takes new orders seamlessly, and even answers questions about current delivery statuses in real-time. My restaurant clients constantly praise how professional it is to always get an instant, accurate answer instead of voicemail.",
+      "Pearl can answer approved questions about our hours, location, and services while collecting the reason for the call. That reduces repetitive interruptions for our front-desk team. We saved hours daily and use those hours on improving client services.",
     name: "Diana Montessori",
-    role: "Sales Representative, Sysco Food Distribution",
-    industry: "Restaurant",
+    role: "Front Office Coordinator",
+    industry: "Dental Practice",
     image: "/images/testimonials/photo-8.png",
-    alt: "Portrait of a restaurant food distribution sales representative",
+    alt: "Portrait of a dental front office coordinator",
     attribution: "illustrative",
   },
   {
     quote:
-      "When customers called during peak lunch hours, they used to hit busy signals. Since hiring Ashley Virtual Waitress, our take-out orders have doubled because she handles multiple callers simultaneously. Best decision we've made for the restaurant!",
+      "When a caller needs to provide detailed case information, our staff can transfer the call to Grace. She follows the approved intake process and sends us an organized summary for review. She even books clients on our calendar. Amazing!",
     name: "Susan Cho",
-    role: "Restaurant Owner",
+    role: "Legal Office Manager",
     industry: "Law Firm",
     image: "/images/testimonials/photo-9.jpg",
     alt: "Portrait of a legal office manager",
@@ -128,12 +118,12 @@ const SCENARIOS: Scenario[] = [
   },
   {
     quote:
-      "Our equipment showroom and service lines get flooded with urgent inquiries from kitchen operators needing parts or emergency repairs. Ashley handles the heavy call volume instantly, collecting exact equipment models and issue details so our technicians arrive fully prepared. It has completely eliminated missed sales opportunities and streamlined our entire dispatch workflow.",
+      "During our busiest hours, Pearl provides overflow coverage and records what each caller needs. Our staff can return calls in an organized way instead of sorting through incomplete voicemail messages.",
     name: "Bernadette Marks",
-    role: "Sales Manager, Apex Restaurant Equipment Distribution",
-    industry: "Restaurant",
+    role: "Dental Operations Manager",
+    industry: "Dental Practice",
     image: "/images/testimonials/photo-10.png",
-    alt: "Portrait of a restaurant equipment distribution sales manager",
+    alt: "Portrait of a dental operations manager",
     attribution: "illustrative",
   },
 ]
@@ -335,16 +325,13 @@ export function TestimonialsSection() {
 }
 
 function TestimonialCard({ scenario, highlighted }: { scenario: Scenario; highlighted: boolean }) {
+  const isLaw = scenario.industry === "Law Firm"
+
   const cardClass = highlighted
     ? "bg-navy-deep text-primary-foreground shadow-xl ring-1 ring-navy-deep/20"
     : "bg-card text-card-foreground shadow-sm ring-1 ring-border"
 
-  const accentBarByIndustry: Record<Industry, string> = {
-    Restaurant: "bg-[#e07a3f]",
-    "Law Firm": "bg-[#e6b800]",
-    "Dental Practice": "bg-teal",
-  }
-  const accentBar = accentBarByIndustry[scenario.industry]
+  const accentBar = isLaw ? "bg-[#e6b800]" : "bg-teal"
 
   return (
     <article
@@ -378,9 +365,7 @@ function TestimonialCard({ scenario, highlighted }: { scenario: Scenario; highli
             {scenario.name}
           </p>
           {/* Title moved down one row, below the name */}
-          <p
-            className={`mt-0.5 whitespace-pre-line text-sm ${highlighted ? "text-primary-foreground/70" : "text-muted-foreground"}`}
-          >
+          <p className={`mt-0.5 text-sm ${highlighted ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
             {scenario.role}
           </p>
         </div>

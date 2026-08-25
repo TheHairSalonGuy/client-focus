@@ -4,7 +4,6 @@ import { useState } from "react"
 import Link from "next/link"
 import { ArrowRight, Check, Loader2, PhoneCall } from "lucide-react"
 import { CALENDLY_URL } from "@/lib/site-config"
-import { formatPhone } from "@/lib/utils"
 
 const inputClass =
   "w-full rounded-lg border border-input bg-card px-4 py-3 text-base text-foreground shadow-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-teal focus:ring-2 focus:ring-teal/40"
@@ -53,7 +52,7 @@ export function GetStartedForm() {
         <h1 className="mt-5 font-serif text-3xl font-normal tracking-tight text-navy-deep">Request Received</h1>
         <p className="mx-auto mt-3 max-w-md text-pretty text-base leading-relaxed text-muted-foreground">
           Thanks! Our team will reach out shortly to complete the remaining setup steps and confirm your details before
-          your 30-day free trial begins. Your trial has not started yet—we&apos;ll walk you through activation together.
+          your 14-day free trial begins. Your trial has not started yet—we&apos;ll walk you through activation together.
         </p>
         <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
           <a
@@ -80,7 +79,7 @@ export function GetStartedForm() {
     <div className="mx-auto max-w-xl">
       <div className="text-center">
         <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-1.5 text-sm font-semibold text-foreground shadow-sm">
-          30-Day Free Trial
+          14-Day Free Trial
         </span>
         <h1 className="mt-6 text-balance font-serif text-4xl font-normal leading-[1.08] tracking-tight text-navy-deep sm:text-5xl">
           Let&apos;s Get Your Trial Set Up
@@ -142,11 +141,9 @@ export function GetStartedForm() {
             type="tel"
             className={inputClass}
             value={form.phone}
-            onChange={(e) => setForm((f) => ({ ...f, phone: formatPhone(e.target.value) }))}
+            onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))}
             placeholder="(555) 123-4567"
             autoComplete="tel"
-            inputMode="tel"
-            maxLength={14}
           />
         </label>
 
@@ -172,7 +169,7 @@ export function GetStartedForm() {
           )}
         </button>
         <p className="text-center text-xs text-muted-foreground">
-          No charge today. Your 30-day free trial starts after setup is confirmed.
+          No charge today. Your 14-day free trial starts after setup is confirmed.
         </p>
       </form>
     </div>

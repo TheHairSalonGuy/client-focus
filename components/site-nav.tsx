@@ -6,16 +6,18 @@ import { ASSESSMENT_URL } from "@/lib/site-config"
 import { BrandLockup } from "@/components/brand-lockup"
 
 const links = [
-  { label: "Ashley", href: "/#ashley" },
+  { label: "Grace", href: "/#grace" },
+  { label: "Pearl", href: "/#pearl" },
   { label: "Industry Data", href: "/#industry-data" },
   { label: "How It Works", href: "/#how-it-works" },
+  { label: "Pricing", href: "/#pricing" },
 ]
 
 function RevealLink({ label, href }: { label: string; href: string }) {
   return (
     <Link
       href={href}
-      className="group relative block overflow-hidden text-2xl font-medium tracking-wide"
+      className="group relative block overflow-hidden text-xl font-medium tracking-wide"
     >
       <span className="block text-muted-foreground transition-transform duration-300 ease-out group-hover:-translate-y-full">
         {label}
@@ -48,7 +50,7 @@ export function SiteNav() {
           ))}
           <Link
             href={ASSESSMENT_URL}
-            className="group relative isolate inline-flex h-12 items-center justify-center overflow-hidden rounded-full bg-teal px-10 py-3.5 text-xl font-semibold text-primary-foreground transition-all duration-300 hover:bg-teal-bright hover:shadow-[0_0_24px_-4px_color-mix(in_oklch,var(--teal-bright)_80%,transparent)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-teal/60"
+            className="group relative isolate inline-flex h-12 items-center justify-center overflow-hidden rounded-full bg-teal px-10 py-3.5 text-lg font-semibold text-primary-foreground transition-all duration-300 hover:bg-teal-bright hover:shadow-[0_0_24px_-4px_color-mix(in_oklch,var(--teal-bright)_80%,transparent)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-teal/60"
           >
             <span aria-hidden="true" className="cta-runner" />
             <span className="relative z-[1]">Start Free Assessment</span>

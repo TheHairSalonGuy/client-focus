@@ -1,402 +1,431 @@
 // ---------------------------------------------------------------------------
-// Assessment engine
+// Virtual Receptionist Opportunity Assessment — data model + calculations.
 //
-// Single source of truth for the "How much are missed client calls costing your
-// office?" assessment. It defines the questions, the contact schema, and all of
-// the scoring / business-metric math. Both the client flow
-// (components/assessment/*) and the server route (app/api/assessment/route.ts)
-// import from here so the numbers shown to the visitor and the numbers persisted
-// for the sales team are always computed identically.
-//
-// Consumers:
-//   - components/assessment/assessment-flow.tsx  -> QUESTIONS, ROLE_OPTIONS,
-//     buildResult, Answers, ContactInfo
-//   - components/assessment/results-view.tsx     -> buildResult, Answers
-//   - app/api/assessment/route.ts                -> calculateScore, getCategory,
-//     calculateMetrics, Answers
-//   - lib/leads.ts                               -> QUESTIONS, getCategory,
-//     Answers, AssessmentMetrics, ContactInfo
+// Phase 1 goal: collect enough information to calculate a Monthly Revenue
+// Opportunity range, Staff Time Recovered range, and Labor Cost Recovered range.
+// These values are computed and persisted here but are NOT displayed on the
+// interim results page — Phase 2 will present them as a visual ROI comparison.
 // ---------------------------------------------------------------------------
 
-/* ------------------------------- Question model ------------------------------ */
-
-export type QuestionType = "choice" | "number"
-
-export interface Question {
-  /** Stable key used as the answer map key. Never reorder/rename casually. */
-  id: string
-  /** Main question text shown to the visitor. */
-  prompt: string
-  /** "choice" renders selectable options; "number" renders a numeric input. */
-  type: QuestionType
-  /** Optional supporting sentence under the prompt. */
-  helper?: string
-  /** Options for choice questions. The answer stores the selected index. */
-  options?: string[]
-  /** Prefix for number questions (e.g. "$"). */
-  prefix?: string
-  /** Placeholder for number questions. */
-  placeholder?: string
-}
-
-/**
- * Answer map. Choice questions store the selected option index; number
- * questions store the raw numeric value. A missing/undefined entry means the
- * question was skipped and a conservative default is used in the math.
- */
-export type Answers = Record<string, number | undefined>
-
-/* --------------------------------- Contact ---------------------------------- */
-
 export const ROLE_OPTIONS = [
-  "Owner/Operator",
-  "Chief Operating Officer (COO)",
-  "Manager",
+  "Attorney",
+  "Dentist",
+  "Owner",
+  "Office Manager",
+  "Practice Manager",
+  "Administrator",
+  "Receptionist",
   "Other",
 ] as const
 
-export type Role = (typeof ROLE_OPTIONS)[number] | ""
+export type Role = (typeof ROLE_OPTIONS)[number]
 
 export interface ContactInfo {
   fullName: string
   practiceName: string
   email: string
-  role: Role
+  role: Role | ""
   phone: string
 }
 
-/* ------------------------------- Questions ---------------------------------- */
-//
-// The order here defines the flow order and progress percentage. There are five
-// questions: four choice questions and one numeric (average client value).
+export type QuestionId = "missedCalls" | "clientValue" | "conversion" | "intakeTime" | "priority"
 
-export const QUESTIONS: Question[] = [
+export type QuestionType = "choice" | "number"
+
+export interface AssessmentQuestion {
+  id: QuestionId
+  type: QuestionType
+  prompt: string
+  /** Optional supporting line shown under the prompt. */
+  helper?: string
+  /** Choice questions: the selectable options (higher index = higher signal). */
+  options?: string[]
+  /** Number questions: input affordances. */
+  prefix?: string
+  placeholder?: string
+}
+
+// The five questions, in order.
+export const QUESTIONS: AssessmentQuestion[] = [
   {
     id: "missedCalls",
     type: "choice",
     prompt:
-      "On a typical day, how many calls does your restaurant miss, send to voicemail, or fail to answer in time?",
-    helper: "Include busy signals, after-hours calls, and callers who hang up before someone answers.",
-    options: ["1–3 calls", "4–7 calls", "8–12 calls", "13 or more calls"],
-  },
-  {
-    id: "whenMissed",
-    type: "choice",
-    prompt: "When do most of these missed calls happen?",
-    helper:
-      "Callers who reach voicemail during business hours or after hours rarely leave a message or call back—they call the next restaurant.",
-    options: [
-      "During peak lunch and dining hours",
-      "During staff breaks",
-      "After hours and on weekends",
-      "When front desk is servicing walk-in customers",
-    ],
+      "How many potential new client calls do you estimate go unanswered during a typical business day because your office is busy, at lunch, after-hours, or closed?",
+    options: ["1–5", "6–10", "11–15", "16 or more"],
   },
   {
     id: "clientValue",
     type: "number",
-    prompt: "What is the average transaction from one order, transaction, or reservation?",
-    helper: "Your best rough estimate value is fine—this drives your opportunity estimate.",
+    prompt: "On average, how much revenue does one new paying client generate for your firm or practice?",
+    helper: "Enter a typical lifetime or case value in whole dollars.",
     prefix: "$",
-    placeholder: "85",
+    placeholder: "5,000",
   },
   {
-    id: "visitFrequency",
+    id: "conversion",
     type: "choice",
-    prompt: "How often do your regular customers visit your restaurant per year?",
-    helper: "This helps calculate the lifetime customer value of captured calls.",
-    options: ["Once a week", "Twice a month", "Once a month", "Once every 3 months"],
+    prompt: "Out of every 10 qualified people who contact your office, approximately how many become paying clients?",
+    // Rendered as "1 out of 10" … "10 out of 10"; converted internally to 10%…100%.
+    options: Array.from({ length: 10 }, (_, i) => `${i + 1} out of 10`),
   },
   {
-    id: "phoneTime",
+    id: "intakeTime",
     type: "choice",
-    prompt: "How much time does your front desk team spend answering repetitive questions calls each day?",
-    helper: "Time on the phone is time not spent servicing walk-in customers.",
-    options: ["Less than 1 hour", "1–2 hours", "2–4 hours", "More than 4 hours"],
+    prompt:
+      "On average, how many minutes does your front desk spend collecting information from each new caller before an attorney or provider can review the case?",
+    options: ["0–15 minutes", "16–30 minutes", "31–60 minutes", "More than 60 minutes"],
   },
-]
-
-/* ----------------------------- Scoring tables ------------------------------- */
-//
-// Each choice question maps its selected index to a set of numeric factors used
-// by the score and the business metrics. Keep these arrays index-aligned with
-// the options above.
-
-/** Daily missed-call ranges keyed to the "missedCalls" options. */
-const CALL_RANGES: { min: number; max: number }[] = [
-  { min: 1, max: 3 },
-  { min: 4, max: 7 },
-  { min: 8, max: 12 },
-  { min: 13, max: 18 },
+  {
+    id: "priority",
+    type: "choice",
+    prompt: "If your front desk had more time every day, what would create the greatest value for your business?",
+    helper: "This helps us personalize your recommendations.",
+    options: [
+      "Delivering a better client experience",
+      "Following up with more potential clients",
+      "Reducing missed appointments and scheduling issues",
+      "Supporting attorneys/providers instead of administrative work",
+      "All of the above",
+    ],
+  },
 ]
 
 /**
- * Annual visit counts keyed to the "visitFrequency" options. Used for the
- * lifetime-value figure (average transaction × visits per year).
- * "Twice a month" = 24 visits a year.
+ * Answers.
+ * - Choice questions store the selected option index.
+ * - clientValue stores the raw whole-dollar amount the user entered.
  */
-const VISITS_PER_YEAR = [52, 24, 12, 4]
+export interface Answers {
+  missedCalls?: number
+  clientValue?: number
+  conversion?: number
+  intakeTime?: number
+  priority?: number
+}
 
-/**
- * Lowercase phrasings of the "visitFrequency" options, used inline in the
- * results copy ("your customers frequent your restaurant regularly — once every
- * week —"). Index-aligned with the options above.
- */
-const VISIT_FREQUENCY_PHRASES = ["once every week", "twice every month", "once every month", "once every 3 months"]
+// ---------------------------------------------------------------------------
+// Calculation inputs (single source of truth for the ranges/rates).
+// ---------------------------------------------------------------------------
 
-/** Daily front-desk phone-time (recoverable hours) keyed to "phoneTime". */
-const HOURS_RANGES: { min: number; max: number }[] = [
-  { min: 0.5, max: 1 },
-  { min: 1, max: 2 },
-  { min: 2, max: 4 },
-  { min: 4, max: 6 },
+/** [min, max] unanswered calls per option in QUESTION 1. */
+export const MISSED_CALL_RANGES: ReadonlyArray<readonly [number, number]> = [
+  [1, 5],
+  [6, 10],
+  [11, 15],
+  [16, 20],
 ]
 
-/** Urgency weight (0–25) keyed to the "whenMissed" options. */
-const WHEN_MISSED_WEIGHT = [10, 14, 25, 18]
+/**
+ * Single representative unanswered-call count per QUESTION 1 option, used for the
+ * headline "one number" revenue estimate. Rule: (min + max) / 2 rounded up; the
+ * open-ended "16 or more" bucket is capped at 16 per product spec.
+ *   1–5 → 3, 6–10 → 8, 11–15 → 13, 16 or more → 16
+ */
+export const MISSED_CALL_MIDPOINTS: ReadonlyArray<number> = [3, 8, 13, 16]
 
-/** Blended hourly cost of front-desk staff time, used for labor-savings math. */
-const LABOR_RATE = 22
+/** [min, max] intake minutes per option in QUESTION 4. */
+export const INTAKE_MINUTE_RANGES: ReadonlyArray<readonly [number, number]> = [
+  [0, 15],
+  [16, 30],
+  [31, 60],
+  [61, 90],
+]
 
-/** Conservative fallbacks when a question was skipped. */
-const DEFAULTS = {
-  missedCalls: 1,
-  whenMissed: 3,
-  visitFrequency: 2,
-  phoneTime: 1,
-  clientValue: 85,
-}
+/** Hourly labor rate used for the Labor Cost Recovered calculation (configurable later). */
+export const LABOR_RATE = 27
 
-/* --------------------------------- Helpers ---------------------------------- */
-
-/** Read a choice index, clamping to a valid range and applying a fallback. */
-function choiceIndex(answers: Answers, id: string, length: number, fallback: number): number {
-  const raw = answers[id]
-  if (typeof raw !== "number" || Number.isNaN(raw)) return fallback
-  return Math.min(Math.max(Math.round(raw), 0), length - 1)
-}
-
-/** Read the numeric client value, applying a floor and a sensible fallback. */
-function clientValueOf(answers: Answers): number {
-  const raw = answers.clientValue
-  if (typeof raw !== "number" || Number.isNaN(raw) || raw <= 0) return DEFAULTS.clientValue
-  return Math.round(raw)
-}
-
-function round(n: number): number {
-  return Math.round(n)
-}
-
-/* --------------------------------- Metrics ---------------------------------- */
+// ---------------------------------------------------------------------------
+// Metrics — the values Phase 2 will visualize.
+// ---------------------------------------------------------------------------
 
 export interface AssessmentMetrics {
-  /** Inputs echoed back for transparency. */
-  clientValue: number
-  visitsPerYear: number
-  /**
-   * Visits per month (visitsPerYear / 12), used by the calculation breakdown
-   * which is expressed as "order frequency per month × transaction × 12".
-   * Kept fractional (e.g. 4.33 for weekly) so × 12 still equals visitsPerYear.
-   */
-  visitsPerMonth: number
-  /** Lowercase phrasing of the selected visit frequency ("once every week"). */
-  visitFrequencyPhrase: string
-  /** Average transaction × visits per year. */
-  lifetimeValue: number
-  /** Daily unanswered-call range and its midpoint. */
   minCalls: number
   maxCalls: number
+  /** Single representative unanswered-call count (see MISSED_CALL_MIDPOINTS). */
   midpointCalls: number
-  /** Missed calls per month (midpoint daily calls × 30). */
-  missedCallsPerMonth: number
-  /** Estimated monthly sales lost range and midpoint. */
+  clientValue: number
+  /** 0..1 (e.g. 0.3 for "3 out of 10"). */
+  conversionRate: number
+  conversionPercent: number
   minRevenue: number
   maxRevenue: number
+  /** Headline "one number" monthly revenue = midpointCalls × clientValue × 30 days × conversionRate. */
   midpointRevenue: number
-  /** Estimated sales lost per year (monthly midpoint × 12). */
-  annualRevenue: number
-  /** Daily staff time (hours) that could be recovered. */
   minRecoveredHours: number
   maxRecoveredHours: number
-  /** Midpoint of the daily recoverable-hours range. */
-  midpointRecoveredHours: number
-  /** Staff hours handed back per month (midpoint daily hours × 30). */
-  recoveredHoursPerMonth: number
-  /** Daily labor cost recovered (recovered hours × blended rate). */
   minLaborSavings: number
   maxLaborSavings: number
+  /** Selected Question 5 label (personalization only), or null if unanswered. */
+  priorityLabel: string | null
+}
+
+function round2(n: number): number {
+  return Math.round(n * 100) / 100
 }
 
 /**
- * Derive the business metrics from the answers.
+ * Turn the raw answers into the business metrics.
  *
- * Models (must stay in sync with the calculation breakdown rendered in
- * results-view.tsx):
- *   missed calls / month  = missed calls per day × 30
- *   sales lost / month    = missed calls per day × average transaction × 30
- *   annual customer value = orders per month × average transaction × 12
+ * Revenue Opportunity (Part 3):
+ *   min = minCalls × clientValue × conversionRate
+ *   max = maxCalls × clientValue × conversionRate
+ *
+ * Time Recovered (Part 4):
+ *   minHours = (minCalls × minIntakeMinutes) / 60
+ *   maxHours = (maxCalls × maxIntakeMinutes) / 60
+ *
+ * Labor Savings (Part 5):
+ *   min = minHours × LABOR_RATE
+ *   max = maxHours × LABOR_RATE
  */
 export function calculateMetrics(answers: Answers): AssessmentMetrics {
-  const callIdx = choiceIndex(answers, "missedCalls", CALL_RANGES.length, DEFAULTS.missedCalls)
-  const visitIdx = choiceIndex(answers, "visitFrequency", VISITS_PER_YEAR.length, DEFAULTS.visitFrequency)
-  const hoursIdx = choiceIndex(answers, "phoneTime", HOURS_RANGES.length, DEFAULTS.phoneTime)
+  const [minCalls, maxCalls] = MISSED_CALL_RANGES[answers.missedCalls ?? -1] ?? [0, 0]
+  const midpointCalls = MISSED_CALL_MIDPOINTS[answers.missedCalls ?? -1] ?? 0
+  const clientValue = Math.max(0, Math.round(answers.clientValue ?? 0))
+  const conversionRate = typeof answers.conversion === "number" ? (answers.conversion + 1) / 10 : 0
+  const [minMinutes, maxMinutes] = INTAKE_MINUTE_RANGES[answers.intakeTime ?? -1] ?? [0, 0]
 
-  const clientValue = clientValueOf(answers)
-  const visitsPerYear = VISITS_PER_YEAR[visitIdx]
-  const lifetimeValue = round(clientValue * visitsPerYear)
+  // Question 1 counts are PER BUSINESS DAY, so monthly figures multiply by 30 days.
+  const DAYS_PER_MONTH = 30
+  const minRevenue = Math.round(minCalls * clientValue * DAYS_PER_MONTH * conversionRate)
+  const maxRevenue = Math.round(maxCalls * clientValue * DAYS_PER_MONTH * conversionRate)
+  const midpointRevenue = Math.round(midpointCalls * clientValue * DAYS_PER_MONTH * conversionRate)
 
-  const minCalls = CALL_RANGES[callIdx].min
-  const maxCalls = CALL_RANGES[callIdx].max
-  const midpointCalls = round((minCalls + maxCalls) / 2)
-  const missedCallsPerMonth = round(midpointCalls * 30)
+  const minRecoveredHours = round2((minCalls * minMinutes) / 60)
+  const maxRecoveredHours = round2((maxCalls * maxMinutes) / 60)
 
-  const revenueFor = (calls: number) => round(calls * clientValue * 30)
-  const minRevenue = revenueFor(minCalls)
-  const maxRevenue = revenueFor(maxCalls)
-  const midpointRevenue = revenueFor(midpointCalls)
+  const minLaborSavings = Math.round(minRecoveredHours * LABOR_RATE)
+  const maxLaborSavings = Math.round(maxRecoveredHours * LABOR_RATE)
 
-  const minRecoveredHours = HOURS_RANGES[hoursIdx].min
-  const maxRecoveredHours = HOURS_RANGES[hoursIdx].max
-  const midpointRecoveredHours = (minRecoveredHours + maxRecoveredHours) / 2
-  const recoveredHoursPerMonth = round(midpointRecoveredHours * 30)
-  const minLaborSavings = round(minRecoveredHours * LABOR_RATE)
-  const maxLaborSavings = round(maxRecoveredHours * LABOR_RATE)
+  const priorityQuestion = QUESTIONS.find((q) => q.id === "priority")
+  const priorityLabel =
+    typeof answers.priority === "number" ? (priorityQuestion?.options?.[answers.priority] ?? null) : null
 
   return {
-    clientValue,
-    visitsPerYear,
-    visitsPerMonth: Math.round((visitsPerYear / 12) * 100) / 100,
-    visitFrequencyPhrase: VISIT_FREQUENCY_PHRASES[visitIdx],
-    lifetimeValue,
     minCalls,
     maxCalls,
     midpointCalls,
-    missedCallsPerMonth,
+    clientValue,
+    conversionRate,
+    conversionPercent: Math.round(conversionRate * 100),
     minRevenue,
     maxRevenue,
     midpointRevenue,
-    annualRevenue: round(midpointRevenue * 12),
     minRecoveredHours,
     maxRecoveredHours,
-    midpointRecoveredHours,
-    recoveredHoursPerMonth,
     minLaborSavings,
     maxLaborSavings,
+    priorityLabel,
   }
 }
 
-/* ---------------------------------- Score ----------------------------------- */
+// ---------------------------------------------------------------------------
+// Score + category (kept for the interim results gauge; Phase 2 replaces this).
+// ---------------------------------------------------------------------------
 
-/**
- * Opportunity score on a 0–100 scale. Higher means a larger, more urgent
- * revenue opportunity from missed calls. Weighted across four signals:
- *   - volume of missed calls  (max 35)
- *   - front-desk phone burden (max 25)
- *   - when calls are missed   (max 25, after-hours weighted highest)
- *   - visit frequency         (max 15, frequent regulars = each miss costs more)
- */
-export function calculateScore(answers: Answers): number {
-  const callIdx = choiceIndex(answers, "missedCalls", CALL_RANGES.length, DEFAULTS.missedCalls)
-  const visitIdx = choiceIndex(answers, "visitFrequency", VISITS_PER_YEAR.length, DEFAULTS.visitFrequency)
-  const hoursIdx = choiceIndex(answers, "phoneTime", HOURS_RANGES.length, DEFAULTS.phoneTime)
-  const whenIdx = choiceIndex(answers, "whenMissed", WHEN_MISSED_WEIGHT.length, DEFAULTS.whenMissed)
-
-  const lastCall = CALL_RANGES.length - 1
-  const lastHours = HOURS_RANGES.length - 1
-  const maxVisits = Math.max(...VISITS_PER_YEAR)
-
-  const callScore = (callIdx / lastCall) * 35
-  const hoursScore = (hoursIdx / lastHours) * 25
-  // Visit frequency is not ordered by index, so scale on the visit count itself.
-  const visitScore = (VISITS_PER_YEAR[visitIdx] / maxVisits) * 15
-  const whenScore = WHEN_MISSED_WEIGHT[whenIdx]
-
-  const total = callScore + hoursScore + visitScore + whenScore
-  return Math.min(100, Math.max(0, Math.round(total)))
+function clamp01(n: number): number {
+  return Math.max(0, Math.min(1, n))
 }
 
-/* -------------------------------- Category ---------------------------------- */
+/**
+ * Weighted 0–100 opportunity score used only by the interim results gauge.
+ * Higher missed-call volume, higher client value, more intake time, and a higher
+ * conversion rate (more revenue recoverable per captured call) all raise the score.
+ */
+export function calculateScore(answers: Answers): number {
+  const missedN = typeof answers.missedCalls === "number" ? answers.missedCalls / (MISSED_CALL_RANGES.length - 1) : 0
+  const intakeN = typeof answers.intakeTime === "number" ? answers.intakeTime / (INTAKE_MINUTE_RANGES.length - 1) : 0
+  const conversionN = typeof answers.conversion === "number" ? answers.conversion / 9 : 0
+  const valueN = clamp01((answers.clientValue ?? 0) / 10000)
+
+  const total = 0.3 * missedN + 0.25 * valueN + 0.25 * intakeN + 0.2 * conversionN
+  return Math.round(total * 100)
+}
 
 export type CategoryKey = "critical" | "high" | "moderate" | "emerging" | "low"
 
-export interface Category {
+export interface ResultCategory {
   key: CategoryKey
+  min: number
+  max: number
   heading: string
-  description: string
+  explanation: string
+  /** Accent token used by the gauge/meter for this range. */
+  accent: string
 }
 
-const CATEGORIES: { threshold: number; category: Category }[] = [
+export const CATEGORIES: ResultCategory[] = [
   {
-    threshold: 80,
-    category: {
-      key: "critical",
-      heading: "Critical Revenue Leak",
-      description:
-        "Your office is likely losing significant revenue to missed calls every week. A Virtual Receptionist could pay for itself almost immediately.",
-    },
+    key: "critical",
+    min: 90,
+    max: 100,
+    heading: "Critical Need for a Virtual Receptionist",
+    explanation:
+      "Your front desk may be overwhelmed, and valuable client opportunities are likely being lost. Immediate support could significantly improve productivity, staff morale, response time, and revenue capture.",
+    accent: "var(--destructive)",
   },
   {
-    threshold: 65,
-    category: {
-      key: "high",
-      heading: "High Opportunity",
-      description:
-        "There is a clear, sizable opportunity to recover missed calls and free up your front desk. Capturing even a fraction would more than cover the cost.",
-    },
+    key: "high",
+    min: 75,
+    max: 89,
+    heading: "High Need for a Virtual Receptionist",
+    explanation:
+      "Your office appears to be missing important systems that could help it operate more efficiently. Missed calls, manual intake, and repetitive scheduling tasks may be limiting growth and placing unnecessary pressure on your staff.",
+    accent: "var(--coral)",
   },
   {
-    threshold: 45,
-    category: {
-      key: "moderate",
-      heading: "Moderate Opportunity",
-      description:
-        "You are leaving real revenue on the table. A Virtual Receptionist would help you capture more callers and give time back to your team.",
-    },
+    key: "moderate",
+    min: 50,
+    max: 74,
+    heading: "Moderate Need for a Virtual Receptionist",
+    explanation:
+      "Your current process may work during slower periods, but busy hours, after-hours calls, and repetitive administrative work could still be costing your office time and client opportunities.",
+    accent: "var(--gold)",
   },
   {
-    threshold: 25,
-    category: {
-      key: "emerging",
-      heading: "Emerging Opportunity",
-      description:
-        "Your call volume is manageable today, but overflow and after-hours coverage would still help you avoid missed opportunities as you grow.",
-    },
+    key: "emerging",
+    min: 25,
+    max: 49,
+    heading: "Emerging Opportunity",
+    explanation:
+      "Your office may not be experiencing severe front-desk pressure yet, but automating selected tasks could improve consistency, reduce interruptions, and make future growth easier to manage.",
+    accent: "var(--teal)",
   },
   {
-    threshold: 0,
-    category: {
-      key: "low",
-      heading: "Low Urgency",
-      description:
-        "You have a good handle on your calls. After-hours and overflow coverage could still add a small margin of safety during your busiest moments.",
-    },
+    key: "low",
+    min: 0,
+    max: 24,
+    heading: "Low Immediate Need",
+    explanation:
+      "Your current front-desk process appears manageable. A Virtual Receptionist may still be useful for after-hours coverage, overflow calls, or selected appointment and reminder tasks.",
+    accent: "var(--teal-bright)",
   },
 ]
 
-/** Map a 0–100 score to its opportunity category. */
-export function getCategory(score: number): Category {
-  const match = CATEGORIES.find(({ threshold }) => score >= threshold)
-  // The final entry has threshold 0, so a match is always found; the fallback
-  // simply satisfies the type checker.
-  return (match ?? CATEGORIES[CATEGORIES.length - 1]).category
+export function getCategory(score: number): ResultCategory {
+  return CATEGORIES.find((c) => score >= c.min && score <= c.max) ?? CATEGORIES[CATEGORIES.length - 1]
 }
 
-/* ------------------------------- buildResult -------------------------------- */
-
-export interface AssessmentResult {
-  answers: Answers
-  score: number
-  category: Category
-  metrics: AssessmentMetrics
+export interface Observation {
+  title: string
+  detail: string
 }
 
 /**
- * Convenience aggregate used by the client. Combines the score, its category,
- * and the derived business metrics into a single object.
+ * Build up to three qualitative observations for the interim results page.
+ * These stay intentionally qualitative — the dollar/hour ranges are reserved for
+ * the Phase 2 visual ROI presentation, so no computed figures are shown here.
  */
+export function buildObservations(answers: Answers): Observation[] {
+  const missedIdx = answers.missedCalls ?? 0
+  const intakeIdx = answers.intakeTime ?? 0
+  const conversionIdx = answers.conversion ?? 0
+  const hasValue = typeof answers.clientValue === "number" && answers.clientValue > 0
+
+  const missedN = missedIdx / (MISSED_CALL_RANGES.length - 1)
+  const intakeN = intakeIdx / (INTAKE_MINUTE_RANGES.length - 1)
+  // Lower conversion = larger upside from capturing more of the calls you already get.
+  const conversionUpside = 1 - conversionIdx / 9
+
+  const candidates: Array<{ relevance: number; priority: number; obs: Observation }> = [
+    {
+      relevance: missedN,
+      priority: 5,
+      obs: {
+        title: "Unanswered Call Volume",
+        detail:
+          "Calls that go unanswered during lunch, busy periods, and after-hours are opportunities competitors may be capturing instead. Consistent coverage helps you keep more of the demand you already generate.",
+      },
+    },
+    {
+      relevance: intakeN,
+      priority: 4,
+      obs: {
+        title: "Front-Desk Time on Intake",
+        detail:
+          "Your team spends meaningful time gathering caller information by hand. A virtual receptionist can collect and organize those details automatically, freeing staff for higher-value work.",
+      },
+    },
+    {
+      relevance: conversionUpside * (hasValue ? 1 : 0.6),
+      priority: 3,
+      obs: {
+        title: "Conversion Upside",
+        detail:
+          "There is room to turn more of the qualified people who contact you into paying clients. Faster, more consistent responses and follow-up typically lift conversion over time.",
+      },
+    },
+    {
+      relevance: 0.5,
+      priority: 2,
+      obs: {
+        title: "Scheduling and No-Show Risk",
+        detail:
+          "Booking, rescheduling, and reminder tasks are easy to automate. Consistent follow-up here typically reduces no-shows and keeps your calendar full.",
+      },
+    },
+    {
+      relevance: (intakeN + missedN) / 2,
+      priority: 1,
+      obs: {
+        title: "Front-Desk Workload Pressure",
+        detail:
+          "Repetitive administrative work is adding pressure to your front desk. Offloading it can improve consistency, response time, and staff morale.",
+      },
+    },
+  ]
+
+  return candidates
+    .sort((a, b) => b.relevance - a.relevance || b.priority - a.priority)
+    .slice(0, 3)
+    .map((c) => c.obs)
+}
+
+/** One recommended next step, tuned to the result category. */
+export function getNextStep(category: CategoryKey): string {
+  switch (category) {
+    case "critical":
+    case "high":
+      return "Book a short demo to see how a virtual receptionist would answer, qualify, and route your calls — and start a 14-day free trial to measure the impact right away."
+    case "moderate":
+      return "Start a 14-day free trial focused on your busiest hours and after-hours coverage to see how many opportunities you can recover."
+    case "emerging":
+      return "Try a 14-day free trial on select tasks — like appointment booking and reminders — to build consistency before your next growth push."
+    case "low":
+    default:
+      return "Consider a virtual receptionist for after-hours and overflow calls. Book a demo whenever you're ready to explore coverage options."
+  }
+}
+
+export interface AssessmentResult {
+  score: number
+  category: ResultCategory
+  observations: Observation[]
+  nextStep: string
+  /** All Phase 2 values (revenue/time/labor ranges + inputs). */
+  metrics: AssessmentMetrics
+}
+
 export function buildResult(answers: Answers): AssessmentResult {
   const score = calculateScore(answers)
   const category = getCategory(score)
-  const metrics = calculateMetrics(answers)
-  return { answers, score, category, metrics }
+  return {
+    score,
+    category,
+    observations: buildObservations(answers),
+    nextStep: getNextStep(category.key),
+    metrics: calculateMetrics(answers),
+  }
+}
+
+/** Full payload persisted with each completed assessment. */
+export interface AssessmentSubmission {
+  contact: ContactInfo
+  answers: Answers
+  score: number
+  categoryKey: CategoryKey
+  categoryHeading: string
+  metrics: AssessmentMetrics
+  completedAt: string
 }

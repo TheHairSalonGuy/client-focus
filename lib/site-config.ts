@@ -28,7 +28,7 @@ export const PROFESSIONAL_ANNUAL_CHECKOUT_URL = "https://buy.stripe.com/00wbIU8L
 // stays consistent across the site.
 export const ASSESSMENT_URL = "/assessment"
 
-// Lead-capture / onboarding destination for the "Start Your 30-Day Free Trial" CTA on
+// Lead-capture / onboarding destination for the "Start Your 14-Day Free Trial" CTA on
 // the assessment results page. This is an onboarding page — it does NOT start the trial
 // until the visitor completes the required signup steps.
 export const FREE_TRIAL_URL = "/get-started"
