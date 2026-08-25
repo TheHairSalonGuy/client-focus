@@ -91,9 +91,9 @@ export function Hero() {
     <section id="top" className="relative w-full">
       {/* Split hero: ~45% light content panel (left) + ~55% image panel (right).
           On mobile/tablet these stack (content first, image below) via grid-cols-1. */}
-      <div className="grid w-full grid-cols-1 lg:h-[calc(100vh-80px)] lg:grid-cols-[48%_52%]">
+      <div className="mx-auto grid w-full max-w-[1400px] gap-6 px-8 py-8 sm:px-10 lg:h-[calc(100vh-80px)] lg:grid-cols-[48%_52%] lg:gap-8 lg:px-16 lg:py-10 xl:px-20">
         {/* ---------------- LEFT: content panel ---------------- */}
-        <div className="relative z-10 w-full flex flex-col justify-center bg-background px-6 pb-12 pt-20 sm:px-10 lg:items-center lg:justify-center lg:overflow-visible lg:pl-12 lg:pr-12 lg:pb-0 lg:pt-20 xl:pl-16 xl:pr-16">
+        <div className="relative z-10 w-full flex flex-col justify-center bg-background px-6 pb-12 pt-20 sm:px-10 lg:items-center lg:justify-center lg:overflow-visible lg:pl-12 lg:pr-12 lg:pb-0 lg:pt-8 xl:pl-16 xl:pr-16">
           <div className="mx-auto w-full max-w-4xl lg:ml-auto lg:mr-0">
             {/* Main sales headline. "Never Miss Another" navy, final word teal, elegant
                 serif, forced onto exactly two lines. The final word is an interactive vertical
@@ -113,7 +113,7 @@ export function Hero() {
             </h2>
 
             {/* Supporting question heading */}
-            <h3 className="mt-3 text-pretty text-xl font-bold leading-snug text-foreground sm:text-2xl lg:text-lg xl:text-xl">{LEAD}</h3>
+            <h3 className="mt-2 text-pretty text-xl font-bold leading-snug text-foreground sm:text-2xl lg:text-base xl:text-lg">{LEAD}</h3>
 
             {/* Supporting copy */}
             <div className="mt-3 space-y-2">
@@ -121,7 +121,7 @@ export function Hero() {
             </div>
 
             {/* Benefit rows — each keeps the subtle proximity hover (lift + scale + brighten). */}
-            <ul className="mt-4 grid gap-2">
+            <ul className="mt-2 grid gap-1">
               {BENEFITS.map((benefit) => (
                 <li
                   key={benefit.title}
@@ -145,7 +145,7 @@ export function Hero() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Book a demo — opens Calendly in a new tab"
-                className="group relative isolate inline-flex w-full items-center justify-center overflow-hidden rounded-lg bg-[#124E8C] px-8 py-5 text-2xl font-semibold tracking-wide text-white transition-all duration-300 hover:bg-[#0e3f72] hover:shadow-[0_0_24px_-4px_rgba(18,78,140,0.7)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#124E8C]/50"
+                className="group relative isolate inline-flex w-auto items-center justify-center overflow-hidden rounded-lg bg-[#124E8C] px-8 py-5 text-2xl font-semibold tracking-wide text-white transition-all duration-300 hover:bg-[#0e3f72] hover:shadow-[0_0_24px_-4px_rgba(18,78,140,0.7)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#124E8C]/50"
               >
                 <span aria-hidden="true" className="cta-runner" />
                 <span className="relative z-[1]">Book a Demo</span>
@@ -186,7 +186,7 @@ export function Hero() {
           <button
             type="button"
             onClick={goPrev}
-            className="group absolute left-4 top-1/2 z-30 flex h-14 w-14 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-card/90 text-foreground shadow-lg backdrop-blur-md transition-all duration-300 hover:h-16 hover:w-16 hover:bg-teal hover:text-primary-foreground hover:shadow-[0_0_40px_-6px_color-mix(in_oklch,var(--teal)_80%,transparent)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-teal/60 md:left-6"
+            className="group absolute left-4 top-1/2 z-30 flex h-14 w-14 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-card/90 text-foreground shadow-lg backdrop-blur-md transition-all duration-300 hover:h-16 hover:w-16 hover:bg-teal hover:text-primary-foreground hover:shadow-[0_0_40px_-6px_color-mix(in_oklch,var(--teal)_80%,transparent)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-teal/60 md:left-8"
             aria-label={`Previous slide: ${prevLabel}`}
           >
             <ChevronLeft className="h-6 w-6 transition-all duration-300 group-hover:h-8 group-hover:w-8" />
@@ -197,7 +197,7 @@ export function Hero() {
           <button
             type="button"
             onClick={goNext}
-            className="group absolute right-4 top-1/2 z-30 flex h-14 w-14 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-card/90 text-foreground shadow-lg backdrop-blur-md transition-all duration-300 hover:h-16 hover:w-16 hover:bg-teal hover:text-primary-foreground hover:shadow-[0_0_40px_-6px_color-mix(in_oklch,var(--teal)_80%,transparent)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-teal/60 md:right-6"
+            className="group absolute right-4 top-1/2 z-30 flex h-14 w-14 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-card/90 text-foreground shadow-lg backdrop-blur-md transition-all duration-300 hover:h-16 hover:w-16 hover:bg-teal hover:text-primary-foreground hover:shadow-[0_0_40px_-6px_color-mix(in_oklch,var(--teal)_80%,transparent)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-teal/60 md:right-8"
             aria-label={`Next slide: ${nextLabel}`}
           >
             <ChevronRight className="h-6 w-6 transition-all duration-300 group-hover:h-8 group-hover:w-8" />
