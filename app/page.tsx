@@ -20,7 +20,7 @@ export default function Home() {
           eyebrow="Ashley — For Restaurants"
           name="Ashley"
           role="Virtual Waitress for Restaurants"
-          description="Experience Ashley, your restaurant's virtual waitress, by calling the number below. Pretend you're a hungry customer calling during peak dinner rush—place a take-out order, ask about menu items, and interrupt her to test how naturally she responds. Ashley handles multiple callers simultaneously so you never lose an order to a busy signal, and we believe she can deliver the same exceptional experience for yours."
+          description="Experience Ashley, your restaurant's virtual waitress, by calling the number below. Place a take-out order the way a real customer would, then tell her you'd like to pay before you pick up—Ashley will text you a secure payment link on the spot. Click it, complete payment, and see for yourself how she captures the full order and gets it paid before it ever leaves the kitchen. She handles multiple callers at once so no order is ever lost to a busy signal, and we believe she can deliver that same experience for your restaurant."
           phoneDisplay="(626) 621-5577"
           phoneHref="tel:+16266215577"
           callLabel="Call Ashley"
