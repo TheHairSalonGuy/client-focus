@@ -21,8 +21,8 @@ export default function Home() {
           name="Ashley"
           role="Virtual Waitress for Restaurants"
           description="Experience Ashley, your restaurant's virtual waitress, by calling the number below. Pretend you're a hungry customer calling during peak dinner rush—place a take-out order, ask about menu items, and interrupt her to test how naturally she responds. Ashley handles multiple callers simultaneously so you never lose an order to a busy signal, and we believe she can deliver the same exceptional experience for yours."
-          phoneDisplay="(626) 888-5138"
-          phoneHref="tel:+16268885138"
+          phoneDisplay="(626) 621-5577"
+          phoneHref="tel:+16266215577"
           callLabel="Call Ashley"
           capabilities={[
             "Available 24/7—including after hours, weekends, and peak lunch/dinner rushes",
