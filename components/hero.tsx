@@ -18,7 +18,9 @@ const HEADLINE_WORD = "Customer."
 const LEAD = "How much is one new order worth to your restaurant?"
 
 const BODY_PARAGRAPH =
-  "When hungry customers hit a busy line during peak hours, they hang up and call the restaurant down the street—cash walking straight into your competitor's register. Your Virtual Receptionist provides 24/7 coverage to take orders, answer menu questions, and book reservations automatically, paying for itself with a single saved rush hour. Take our Free Assessment below to see how much are missed calls costing your restaurant."
+  "When hungry customers hit a busy line during peak hours, they hang up and call the restaurant down the street—cash walking straight into your competitor's register. Your Virtual Receptionist provides 24/7 coverage to take orders, answer menu questions, and book reservations automatically, paying for itself with a single saved rush hour."
+
+const BENEFITS_LEAD = "Here's how Your Virtual Receptionist can help your business."
 
 const BENEFITS: Benefit[] = [
   {
@@ -91,15 +93,15 @@ export function Hero() {
     <section id="top" className="relative w-full">
       {/* Split hero: ~45% light content panel (left) + ~55% image panel (right).
           On mobile/tablet these stack (content first, image below) via grid-cols-1. */}
-      <div className="mx-auto grid w-full max-w-[1400px] gap-6 px-8 py-8 sm:px-10 lg:h-[calc(100vh-80px)] lg:grid-cols-[48%_52%] lg:gap-8 lg:px-16 lg:py-10 xl:px-20">
+      <div className="mx-auto grid w-full max-w-[1400px] gap-6 px-8 py-8 sm:px-10 lg:h-[calc(100vh-80px)] lg:grid-cols-[48%_52%] lg:gap-2 lg:px-16 lg:py-10 xl:px-20">
         {/* ---------------- LEFT: content panel ---------------- */}
-        <div className="relative z-10 w-full flex flex-col justify-center bg-background px-6 pb-12 pt-20 sm:px-10 lg:items-center lg:justify-center lg:overflow-visible lg:pl-12 lg:pr-12 lg:pb-0 lg:pt-8 xl:pl-16 xl:pr-16">
+        <div className="relative z-10 w-full flex flex-col justify-center bg-background px-6 pb-12 pt-20 sm:px-10 lg:items-center lg:justify-center lg:overflow-visible lg:pl-12 lg:pr-12 lg:pb-0 lg:pt-8 xl:pl-4 xl:pr-16">
           <div className="mx-auto w-full max-w-4xl lg:ml-auto lg:mr-0">
             {/* Main sales headline. "Never Miss Another" navy, final word teal, elegant
                 serif, forced onto exactly two lines. The final word is an interactive vertical
                 text-swap: on hover "Client" slides up out of view while "Order" slides in from
                 below. */}
-            <h2 className="word-swap-group relative font-serif text-6xl font-normal leading-[1.03] tracking-tight text-balance lg:text-[2.75rem] xl:text-5xl">
+            <h2 className="word-swap-group relative font-serif text-6xl font-normal leading-[1.03] tracking-tight text-balance lg:text-[4.25rem] xl:text-7xl">
               <span className="block text-navy-deep">Never Miss</span>
               <span className="block">
                 <span className="text-navy-deep">Another </span>
@@ -113,19 +115,22 @@ export function Hero() {
             </h2>
 
             {/* Supporting question heading */}
-            <h3 className="mt-2 text-pretty text-xl font-bold leading-snug text-foreground sm:text-2xl lg:text-base xl:text-lg">{LEAD}</h3>
+            <h3 className="mt-2 text-pretty text-xl font-bold leading-snug text-foreground sm:text-2xl lg:text-lg xl:text-xl">{LEAD}</h3>
 
             {/* Supporting copy */}
             <div className="mt-3 space-y-2">
-              <p className="text-pretty text-xl font-medium leading-relaxed text-foreground lg:text-sm lg:leading-snug">{BODY_PARAGRAPH}</p>
+              <p className="text-pretty text-xl font-medium leading-relaxed text-foreground lg:text-base lg:leading-snug">{BODY_PARAGRAPH}</p>
             </div>
+
+            {/* Lead-in line introducing the benefit checklist below. */}
+            <p className="mt-3 text-pretty text-xl font-semibold text-navy-deep lg:text-base">{BENEFITS_LEAD}</p>
 
             {/* Benefit rows — each keeps the subtle proximity hover (lift + scale + brighten). */}
             <ul className="mt-2 grid gap-1">
               {BENEFITS.map((benefit) => (
                 <li
                   key={benefit.title}
-                  className="group flex origin-left transform-gpu items-start gap-3 py-0.5 text-lg leading-snug text-foreground transition-all duration-300 ease-out hover:-translate-y-1 hover:scale-[1.03] hover:brightness-110 sm:text-2xl lg:text-sm"
+                  className="group flex origin-left transform-gpu items-start gap-3 py-0.5 text-lg leading-snug text-foreground transition-all duration-300 ease-out hover:-translate-y-1 hover:scale-[1.03] hover:brightness-110 sm:text-2xl lg:text-base"
                 >
                   <span className="mt-0.5 flex h-6 w-6 flex-none items-center justify-center rounded-full bg-teal/15 text-teal transition-colors duration-300 ease-out group-hover:bg-teal/25 group-hover:text-teal-bright">
                     <Check className="h-4 w-4" strokeWidth={3} />
@@ -138,14 +143,16 @@ export function Hero() {
               ))}
             </ul>
 
-            {/* Book a Demo button — matches the navigation CTA (teal pill + running highlight). */}
-            <div className="mt-10">
+            {/* Book a Demo button — matches the navigation CTA (teal pill + running highlight).
+                Indented to roughly align with the checklist copy above (not the checkmark
+                icons), and stretched to the column's right edge for balance with the text. */}
+            <div className="mt-10 lg:pl-9">
               <a
                 href={CALENDLY_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Book a demo — opens Calendly in a new tab"
-                className="group relative isolate inline-flex w-auto items-center justify-center overflow-hidden rounded-lg bg-[#124E8C] px-14 py-5 text-2xl font-semibold tracking-wide text-white transition-all duration-300 hover:bg-[#0e3f72] hover:shadow-[0_0_24px_-4px_rgba(18,78,140,0.7)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#124E8C]/50"
+                className="group relative isolate flex w-full items-center justify-center overflow-hidden rounded-lg bg-[#124E8C] px-14 py-4 text-2xl font-semibold tracking-wide text-white transition-all duration-300 hover:bg-[#0e3f72] hover:shadow-[0_0_24px_-4px_rgba(18,78,140,0.7)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#124E8C]/50"
               >
                 <span aria-hidden="true" className="cta-runner" />
                 <span className="relative z-[1]">Book a Demo</span>
@@ -177,19 +184,14 @@ export function Hero() {
             </div>
           ))}
 
-          {/* Category label chip, top-left over the image */}
-          <div className="absolute left-4 top-4 z-30 rounded-full bg-navy-deep/85 px-4 py-1.5 text-sm font-semibold text-primary-foreground backdrop-blur-md md:left-6 md:top-6">
-            {SLIDES[index].label}
-          </div>
-
           {/* Carousel navigation, vertically centered over the image */}
           <button
             type="button"
             onClick={goPrev}
-            className="group absolute left-4 top-1/2 z-30 flex h-14 w-14 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-card/90 text-foreground shadow-lg backdrop-blur-md transition-all duration-300 hover:h-16 hover:w-16 hover:bg-teal hover:text-primary-foreground hover:shadow-[0_0_40px_-6px_color-mix(in_oklch,var(--teal)_80%,transparent)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-teal/60 md:left-8"
+            className="group absolute left-4 top-1/2 z-30 flex h-[42px] w-[42px] -translate-y-1/2 items-center justify-center rounded-full border border-border bg-card/90 text-foreground shadow-lg backdrop-blur-md transition-all duration-300 hover:h-12 hover:w-12 hover:bg-teal hover:text-primary-foreground hover:shadow-[0_0_40px_-6px_color-mix(in_oklch,var(--teal)_80%,transparent)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-teal/60 md:left-8"
             aria-label={`Previous slide: ${prevLabel}`}
           >
-            <ChevronLeft className="h-6 w-6 transition-all duration-300 group-hover:h-8 group-hover:w-8" />
+            <ChevronLeft className="h-[18px] w-[18px] transition-all duration-300 group-hover:h-6 group-hover:w-6" />
             <span className="pointer-events-none absolute left-full ml-3 whitespace-nowrap rounded-full bg-navy-deep/90 px-3 py-1.5 text-sm font-semibold text-primary-foreground opacity-0 shadow-lg backdrop-blur-md transition-opacity duration-200 group-hover:opacity-100">
               {prevLabel}
             </span>
@@ -197,10 +199,10 @@ export function Hero() {
           <button
             type="button"
             onClick={goNext}
-            className="group absolute right-4 top-1/2 z-30 flex h-14 w-14 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-card/90 text-foreground shadow-lg backdrop-blur-md transition-all duration-300 hover:h-16 hover:w-16 hover:bg-teal hover:text-primary-foreground hover:shadow-[0_0_40px_-6px_color-mix(in_oklch,var(--teal)_80%,transparent)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-teal/60 md:right-8"
+            className="group absolute right-4 top-1/2 z-30 flex h-[42px] w-[42px] -translate-y-1/2 items-center justify-center rounded-full border border-border bg-card/90 text-foreground shadow-lg backdrop-blur-md transition-all duration-300 hover:h-12 hover:w-12 hover:bg-teal hover:text-primary-foreground hover:shadow-[0_0_40px_-6px_color-mix(in_oklch,var(--teal)_80%,transparent)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-teal/60 md:right-8"
             aria-label={`Next slide: ${nextLabel}`}
           >
-            <ChevronRight className="h-6 w-6 transition-all duration-300 group-hover:h-8 group-hover:w-8" />
+            <ChevronRight className="h-[18px] w-[18px] transition-all duration-300 group-hover:h-6 group-hover:w-6" />
             <span className="pointer-events-none absolute right-full mr-3 whitespace-nowrap rounded-full bg-navy-deep/90 px-3 py-1.5 text-sm font-semibold text-primary-foreground opacity-0 shadow-lg backdrop-blur-md transition-opacity duration-200 group-hover:opacity-100">
               {nextLabel}
             </span>
