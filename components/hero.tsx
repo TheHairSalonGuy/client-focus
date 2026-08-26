@@ -7,6 +7,7 @@ import { CALENDLY_URL } from "@/lib/site-config"
 
 // Value-focused feature checklist row.
 type Benefit = { title: string; description: string }
+type HeroCopy = { headlineWord: string; lead: string; body: string; subheading: string; benefits: Benefit[] }
 
 // A single restaurant-category carousel slide. Copy is shared across all slides;
 // only the image (and its alt text) changes per category.
@@ -19,6 +20,18 @@ const LEAD = "How much is one new order worth to your restaurant?"
 
 const BODY_PARAGRAPH =
   "When hungry customers hit a busy line during peak hours, they hang up and call the restaurant down the street—cash walking straight into your competitor's register. Your Virtual Receptionist provides 24/7 coverage to take orders, answer menu questions, and book reservations automatically, paying for itself with a single saved rush hour. Take our Free Assessment below to see how much are missed calls costing your restaurant."
+
+const DRIVE_THRU_COPY: HeroCopy = {
+  headlineWord: "Revenue.",
+  lead: "How much is faster drive-thru speed and perfect order accuracy worth to your locations?",
+  body: "When long lines hit your drive-thru during peak rushes, staff burn out and speed of service stalls. Exhausted employees make order errors and forget to offer upsells—costing your stores revenue on every shift. Your Virtual Drive-Thru Specialist provides 24/7 bilingual coverage for your speakers and phone lines, taking complex orders flawlessly while paying for itself in labor savings and increased average ticket size.",
+  subheading: "Here's how Your Virtual Drive-Thru Specialist can help your business.",
+  benefits: [
+    { title: "Simultaneous Drive-Thru & Multi-Phone Order Handling", description: "Your crew can only focus on one task at a time. Ashley handles the live drive-thru speaker while simultaneously taking multiple phone orders in the background, making call-ahead ordering an effortless revenue stream for customers who prefer calling over apps." },
+    { title: "100% Order Accuracy in English & Spanish", description: "Misheard orders cause costly remakes and slow down your window. Ashley repeats every order back with precision, fluently handling custom menu modifications in both English and Spanish to keep your kitchen line moving seamlessly." },
+    { title: "24/7 Upselling That Never Fatigues", description: "Human staff forget to upsell when tired or under pressure. Ashley never calls in sick, takes breaks, or misses a chance—consistently offering high-margin add-ons to every single car and caller to boost your multi-unit profitability automatically." },
+  ],
+}
 
 const BENEFITS: Benefit[] = [
   {
@@ -68,6 +81,13 @@ const SLIDES: Slide[] = [
     objectPosition: "object-[50%_28%]",
   },
   {
+    id: "drive-thru",
+    label: "Drive-Thru",
+    src: "/hero-drive-thru.png",
+    alt: "A bilingual drive-thru specialist wearing a headset at a fast-food order station",
+    objectPosition: "object-[50%_35%]",
+  },
+  {
     id: "bar-grill",
     label: "Sports Bar Bistro",
     src: "/hero-sports-bar.png",
@@ -79,6 +99,9 @@ const SLIDES: Slide[] = [
 export function Hero() {
   // Index-based carousel: 0 = Fine Dining (default) → Casual → Quick Service → Bar & Grill.
   const [index, setIndex] = useState(1)
+  const copy: HeroCopy = SLIDES[index].id === "drive-thru"
+    ? DRIVE_THRU_COPY
+    : { headlineWord: HEADLINE_WORD, lead: LEAD, body: BODY_PARAGRAPH, subheading: "", benefits: BENEFITS }
 
   const goPrev = () => setIndex((i) => (i - 1 + SLIDES.length) % SLIDES.length)
   const goNext = () => setIndex((i) => (i + 1) % SLIDES.length)
@@ -100,29 +123,36 @@ export function Hero() {
                 text-swap: on hover "Client" slides up out of view while "Order" slides in from
                 below. */}
             <h2 className="word-swap-group relative font-serif text-6xl font-normal leading-[1.03] tracking-tight text-balance lg:text-[2.75rem] xl:text-5xl">
-              <span className="block text-navy-deep">Never Miss</span>
-              <span className="block">
-                <span className="text-navy-deep">Another </span>
-                <span className="word-swap-window text-teal">
-                  <span className="word-swap-track">
-                    <span>{HEADLINE_WORD}</span>
-                    <span>Order.</span>
+              {SLIDES[index].id === "drive-thru" ? (
+                <span className="block text-navy-deep">Supercharge Your Drive-Thru <span className="text-teal">Revenue.</span></span>
+              ) : (
+                <>
+                  <span className="block text-navy-deep">Never Miss</span>
+                  <span className="block">
+                    <span className="text-navy-deep">Another </span>
+                    <span className="word-swap-window text-teal">
+                      <span className="word-swap-track">
+                        <span>{copy.headlineWord}</span>
+                        <span>Order.</span>
+                      </span>
+                    </span>
                   </span>
-                </span>
-              </span>
+                </>
+              )}
             </h2>
 
             {/* Supporting question heading */}
-            <h3 className="mt-2 text-pretty text-xl font-bold leading-snug text-foreground sm:text-2xl lg:text-base xl:text-lg">{LEAD}</h3>
+            <h3 className="mt-2 text-pretty text-xl font-bold leading-snug text-foreground sm:text-2xl lg:text-base xl:text-lg">{copy.lead}</h3>
 
             {/* Supporting copy */}
             <div className="mt-3 space-y-2">
-              <p className="text-pretty text-xl font-medium leading-relaxed text-foreground lg:text-sm lg:leading-snug">{BODY_PARAGRAPH}</p>
+              <p className="text-pretty text-xl font-medium leading-relaxed text-foreground lg:text-sm lg:leading-snug">{copy.body}</p>
             </div>
 
             {/* Benefit rows — each keeps the subtle proximity hover (lift + scale + brighten). */}
+            {copy.subheading && <h4 className="mt-3 text-pretty text-lg font-bold leading-snug text-teal lg:text-base">{copy.subheading}</h4>}
             <ul className="mt-2 grid gap-1">
-              {BENEFITS.map((benefit) => (
+              {copy.benefits.map((benefit) => (
                 <li
                   key={benefit.title}
                   className="group flex origin-left transform-gpu items-start gap-3 py-0.5 text-lg leading-snug text-foreground transition-all duration-300 ease-out hover:-translate-y-1 hover:scale-[1.03] hover:brightness-110 sm:text-2xl lg:text-sm"
