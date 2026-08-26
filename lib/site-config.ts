@@ -1,7 +1,7 @@
 // Single source of truth for the Calendly scheduling URL.
 // Every "Book a Demo" / "Book a Discovery Call" CTA must import this constant
 // so the destination can never drift out of sync across components.
-export const CALENDLY_URL = "https://calendly.com/nevermissclient/discoverycall"
+export const CALENDLY_URL = "https://calendly.com/myvirtualofficer/discoverycall"
 
 // Single source of truth for the universal Stripe setup checkout used by the
 // Essential and Professional "Get Started" buttons (same link for Monthly and
