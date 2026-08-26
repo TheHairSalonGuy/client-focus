@@ -175,7 +175,7 @@ export function ResultsView({
           <button
             type="button"
             onClick={scrollToCall}
-            className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-teal px-6 py-4 text-base font-semibold text-primary-foreground transition-all duration-300 hover:bg-teal-bright hover:shadow-[0_0_24px_-4px_color-mix(in_oklch,var(--teal-bright)_80%,transparent)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-teal/60"
+            className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-teal px-6 py-4 text-xl font-semibold text-primary-foreground transition-all duration-300 hover:bg-teal-bright hover:shadow-[0_0_24px_-4px_color-mix(in_oklch,var(--teal-bright)_80%,transparent)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-teal/60"
           >
             <Phone className="h-5 w-5" />
             Call to Test
@@ -184,7 +184,7 @@ export function ResultsView({
             href={CALENDLY_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-[#124E8C] px-6 py-4 text-base font-semibold text-white transition-all duration-300 hover:bg-[#0e3f72] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#124E8C]/40"
+            className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-[#124E8C] px-6 py-4 text-xl font-semibold text-white transition-all duration-300 hover:bg-[#0e3f72] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#124E8C]/40"
           >
             Book a Demo
           </a>
