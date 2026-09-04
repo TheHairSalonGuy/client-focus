@@ -1,3 +1,8 @@
+import Link from "next/link"
+
+const footerLinkClassName =
+  "rounded-sm text-sm text-teal-bright underline-offset-4 transition-colors hover:text-foreground hover:underline focus-visible:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-bright focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+
 export function SiteFooter() {
   return (
     <footer className="border-t border-border py-12">
@@ -29,9 +34,21 @@ export function SiteFooter() {
           </div>
         </div>
 
+        <nav
+          aria-label="Legal"
+          className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-2"
+        >
+          <Link href="/privacy" className={footerLinkClassName}>
+            Privacy Policy
+          </Link>
+          <Link href="/terms" className={footerLinkClassName}>
+            Terms of Service
+          </Link>
+        </nav>
+
         {/* Copyright in a narrow row beneath the contacts */}
-        <p className="mt-10 text-center text-sm text-muted-foreground">
-          &copy; 2026 Never Miss a Client. All rights reserved.
+        <p className="mt-6 text-center text-sm text-muted-foreground">
+          &copy; 2026 Gig AI Inc dba Swish Voice. All rights reserved.
         </p>
       </div>
     </footer>
